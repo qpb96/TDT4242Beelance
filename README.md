@@ -5,7 +5,7 @@
 .gitlab-ci.yml - gitlab ci
 Procfile - heroku kjører serveren
 
-- **beelance/** django project folder containing the projects modules
+- **beelance/** django project folder containing the project modules
   - **core/** contains all the project templates
     - **index.html** One of the project templates that uses a template language to insert if, loops and variables into html.
   - **home/** user profile - overview over user projects
@@ -19,8 +19,8 @@ Procfile - heroku kjører serveren
     - **forms.py**  -  defenition of forms. Used to render html forms and verify user input
 
 
-  **payment/** - module handling payment
-  **projects/** - The largest module of the project containing code for creating project and tasks. Upload files, view files, adding roles and user to roles.
+  - **payment/** - module handling payment
+  - **projects/** - The largest module of the project containing code for creating project and tasks. Upload files, view files, adding roles and user to roles.
   - **beelance/** - The projects main module contaning settings.
   - **static/** - common static files
   - **user/** - module extending django's user model with a profile contaning more information about the user.
