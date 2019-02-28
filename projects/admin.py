@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Project, Task, TaskFile, Delivery, ProjectCategory, Team, TaskFileTeam
+from .models import Project, PromotedProject, Task, TaskFile, Delivery, ProjectCategory, Team, TaskFileTeam
 
 
 class TaskInline(admin.TabularInline):
@@ -15,7 +15,15 @@ class ProjectAdmin(admin.ModelAdmin):
             return super(ProjectAdmin, self).get_inline_instances(request, obj)
         return list()
 
+class PromotedProjectAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None,                      {'fields': ['id']}),
+        ("Project details",         {'fields': ['project']}),
+        ("Promotion details",       {'fields': ['promotion_end']}),
+    ]
+
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(PromotedProject, PromotedProjectAdmin)
 admin.site.register(Task)
 admin.site.register(TaskFile)
 admin.site.register(Delivery)
