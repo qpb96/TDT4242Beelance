@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '$n%^#g%qx#82w6t^dvjqwv)q*1cy+fwh1ohku7-rbjqcei2^jr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ADMINS = [('APU', 'tdt4242apu@gmail.com')]
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_icons',
     'payment.apps.PaymentConfig',
+    'account.apps.AccountConfig'
 ]
 
 MIDDLEWARE = [

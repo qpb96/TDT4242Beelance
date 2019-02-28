@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% load icons %}
+{% load project_extras %}
+{% load home_extras %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="mt-5">{{user.first_name}} {{user.last_name}} <img class="ml-1 honey" src="{% static 'img/honeybee.png' %}"  alt="Image of a honeybee."/></h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="mt-5">Email: {{ user.email }} </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="mt-5">Phone: {{ user.phone }} </h2>
+    </div>
+  </div>
+
+{% endblock %}
