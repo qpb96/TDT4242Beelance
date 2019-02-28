@@ -37,6 +37,7 @@ class ProjectCategory(models.Model):
     def __str__(self):
         return self.name
 
+
 class Project(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
@@ -59,6 +60,13 @@ class Project(models.Model):
         return self.title
 
 
+class PromotedProject(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="promoted_projects")
+    promotion_start = models.DateTimeField(auto_now_add=True, blank=True)
+    promotion_end = models.DateTimeField(blank=True)
+
+    def __str__(self):
+        return str(self.id) + " " + self.project.title
 
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")
