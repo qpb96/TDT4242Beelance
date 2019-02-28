@@ -61,6 +61,7 @@ def new_project(request):
 
 def project_view(request, project_id):
     project = Project.objects.get(pk=project_id)
+    #TODO: add filter on promoted items and non promo items
     tasks = project.tasks.all()
     total_budget = 0
 
