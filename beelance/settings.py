@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_icons',
     'payment.apps.PaymentConfig',
+    'constance',
+    'constance.backends.database',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'constance.context_processors.config',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -166,3 +169,10 @@ if is_prod:
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None)
 
     django_heroku.settings(locals())
+
+# DYNAMIC GLOBAL CONFIGURABLE SETTINGS
+# See https://django-constance.readthedocs.io/en/latest/
+CONSTANCE_CONFIG = {
+}
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
