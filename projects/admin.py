@@ -16,10 +16,10 @@ class ProjectAdmin(admin.ModelAdmin):
         return list()
 
 class PromotedProjectAdmin(admin.ModelAdmin):
+    list_display = ('id', 'project', 'start', 'end')
     fieldsets = [
         (None,                      {'fields': ['id']}),
         ("Project details",         {'fields': ['project']}),
-        ("Promotion details",       {'fields': ['promotion_end']}),
     ]
 
 admin.site.register(Project, ProjectAdmin)

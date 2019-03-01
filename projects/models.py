@@ -5,6 +5,9 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 import os
 
+from constance import config
+from datetime import datetime, timedelta
+
 class OverwriteStorage(FileSystemStorage):
 
     def get_available_name(self, name, max_length):
@@ -62,11 +65,16 @@ class Project(models.Model):
 
 class PromotedProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="promoted_projects")
-    promotion_start = models.DateTimeField(auto_now_add=True, blank=True)
-    promotion_end = models.DateTimeField(blank=True)
+    start = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def end(self):
+        if self.start is not None:
+            return self.start + timedelta(days=config.PROMOTION_DURATION_IN_DAYS)
+        else:
+            return "-"
+            
     def __str__(self):
-        return str(self.id) + " " + self.project.title
+        return str(self.project.id) + " " + self.project.title
 
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")

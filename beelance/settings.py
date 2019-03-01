@@ -181,6 +181,7 @@ CONSTANCE_CONFIG = {
         3, 'The amount of promotions displayed to the user per category. WARNING: ' \
             + 'PROMOTION_POOL_SIZE must be bigger than PROMOTION_DISPLAY_AMOUNT'),
     'PROMOTION_FEE': (100, 'The fee for promoting a project.'),
+    'PROMOTION_DURATION_IN_DAYS': (14, 'The number of days the promotion will last.')
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
