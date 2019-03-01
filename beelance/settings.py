@@ -180,10 +180,14 @@ CONSTANCE_CONFIG = {
     'PROMOTION_DISPLAY_AMOUNT': (
         3, 'The amount of promotions displayed to the user per category. WARNING: ' \
             + 'PROMOTION_POOL_SIZE must be bigger than PROMOTION_DISPLAY_AMOUNT'),
+    'PROMOTION_FEE': (100, 'The fee for promoting a project.'),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Promotion options': ('PROMOTION_POOL_SIZE', 'PROMOTION_DISPLAY_AMOUNT',),
+    'Promotion options': (
+        'PROMOTION_POOL_SIZE',
+        'PROMOTION_DISPLAY_AMOUNT',
+        'PROMOTION_FEE'),
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
