@@ -5,14 +5,15 @@ from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from user.models import Profile
+from constance import config    # lazy loading
 
-def projects(request, promotion_display_amount=3):
+def projects(request):
     project_categories = ProjectCategory.objects.all()
 
     promoted_projects = []
     for category in project_categories:
         selection = PromotedProject.objects.all().filter(project__category=category)
-        selection = selection.order_by('?')[0:promotion_display_amount]
+        selection = selection.order_by('?')[0:config.PROMOTION_DISPLAY_AMOUNT]
         promoted_projects.extend(selection)
 
     projects = Project.objects.all().exclude(id__in=[p.project.id for p in promoted_projects])

@@ -172,7 +172,18 @@ if is_prod:
 
 # DYNAMIC GLOBAL CONFIGURABLE SETTINGS
 # See https://django-constance.readthedocs.io/en/latest/
+
 CONSTANCE_CONFIG = {
+    'PROMOTION_POOL_SIZE': (
+        20, 'The amount of promotions available per project category. WARNING: ' \
+            + 'PROMOTION_POOL_SIZE must be bigger than PROMOTION_DISPLAY_AMOUNT'),
+    'PROMOTION_DISPLAY_AMOUNT': (
+        3, 'The amount of promotions displayed to the user per category. WARNING: ' \
+            + 'PROMOTION_POOL_SIZE must be bigger than PROMOTION_DISPLAY_AMOUNT'),
+}
+
+CONSTANCE_CONFIG_FIELDSETS = {
+    'Promotion options': ('PROMOTION_POOL_SIZE', 'PROMOTION_DISPLAY_AMOUNT',),
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
