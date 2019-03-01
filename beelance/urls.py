@@ -17,7 +17,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+import account
+from account import views
+from django.db import models
+from django.contrib.auth.models import User
 
+
+
+def sample_view(request):
+    current_user = request.user
+    print("sadasd")
 
 urlpatterns = [
     path('', include('home.urls')),
@@ -25,6 +34,7 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('projects/', include('projects.urls')),
     path('payment/', include('payment.urls')),
-    path('account/', include('account.urls'))
+    path('account/', include('account.urls')),
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
