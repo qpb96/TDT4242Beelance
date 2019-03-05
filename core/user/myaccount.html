@@ -15,12 +15,42 @@
 
   <div class="row">
     <div class="col-lg text-center">
-      <h2 class="mt-5">Email: {{ user.email }} </h2>
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">Email: {{ user.email }} </h2>
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
-      <h2 class="mt-5">Phone: {{ user.phone }} </h2>
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">Company: {{ user.profile.company }} </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">Phone: {{ user.profile.phone_number }} </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">Address: {{ user.profile.street_address }} </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">City: {{ user.profile.city }} </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">State: {{ user.profile.state }} </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">Postal code: {{ user.profile.postal_code }} </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <h2 class="col-md mb-3 ml-3 mr-3 mt-3">Country: {{ user.profile.country }} </h2>
     </div>
   </div>
   <div class="row">

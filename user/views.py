@@ -32,50 +32,57 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'user/signup.html', {'form': form})
 
-
 @login_required
-def get_user_profile(request, username):
+def view_user_profile(request, username):
     my_user = request.user.username
+    # View their own user profile
     if my_user == username:
-        print(request.user.username)
         return render(request, 'user/myaccount.html')
+    # View others' user profile
     else:
         user = User.objects.get(username=username)
         user_first_name = user.first_name
         user_last_name = user.last_name
         user_email = user.email
         user_username = user.username
-#        #user_phone = models.pr
-        print(user.username)
+        user_company = user.profile.company
+        user_phone = user.profile.phone_number
+        user_address = user.profile.street_address
+        user_city = user.profile.city
+        user_state = user.profile.state
+        user_postal_code = user.profile.postal_code
+        user_country = user.profile.country
+
         return render(request, 'user/userprofile.html', {
             "user_username": user_username,
             "user_first_name": user_first_name,
             "user_last_name": user_last_name,
             "user_email": user_email,
-#            "user_phone": user_phone,
+            "user_company": user_company,
+            "user_phone": user_phone,
+            "user_address": user_address,
+            "user_city": user_city,
+            "user_state": user_state,
+            "user_postal_code": user_postal_code,
+            "user_country": user_country
         })
 
-
+# Edit user profile only works on the fields that belong to the Profile model,
+# not the fields that belong to django's User model like first_name, email, etc.
 @login_required
 def edit_user_profile(request,user_id):
     my_user = User.objects.get(pk=user_id)
 
     if request.user == my_user:
         if request.method == 'POST':
-            profile_form = ProfileForm(request.POST, instance=request.user.profile)  
+            profile_form = ProfileForm(request.POST, instance=my_user.profile)  
             if profile_form.is_valid():
-                # Must do something else here to save the actual request data... ??
-                # profile_form seems to not really be updated with anything ??? 
-                profile = profile_form.save(commit=False)
-                my_user.profile = profile
+                new_profile = profile_form.save(commit=False)
+                my_user.profile = new_profile
                 my_user.save()
-
-                # If successfully updated profile
-                if my_user.profile != profile:
-                    from django.contrib import messages
-                    messages.success(request, ('Your profile was successfully updated!'))
-
-                return redirect('get_user_profile', username=my_user.username)
+                from django.contrib import messages
+                messages.success(request, ('Your profile was successfully updated!'))
+                return redirect('view_user_profile', username=my_user.username)
             else:
                 from django.contrib import messages
                 messages.error(request, ('Please fill out the fields with correct information.'))

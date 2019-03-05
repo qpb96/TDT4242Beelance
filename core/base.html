@@ -42,7 +42,7 @@
         </li>
           {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link font-weight-light" href="{% url 'get_user_profile' user.username%}">{{ user.username }}</a>
+          <a class="nav-link font-weight-light" href="{% url 'view_user_profile' user.username%}">{{ user.username }}</a>
         </li>
           {% endif %}
 

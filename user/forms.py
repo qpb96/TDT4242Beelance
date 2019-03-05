@@ -28,11 +28,9 @@ class SignUpForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=30, required=False)
-    last_name = forms.CharField(max_length=30, required=False)
-    company = forms.CharField(max_length=30, required=False, help_text= 'Here you can add your company.')
+    company = forms.CharField(max_length=30, required=False)
     phone_number = forms.CharField(max_length=50, required=False)
-
+    
     street_address = forms.CharField(max_length=50, required=False)
     city = forms.CharField(max_length=50, required=False)
     state = forms.CharField(max_length=50, required=False)
@@ -42,4 +40,4 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'categories', 'company' ,  'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country' )
+        fields = ('categories', 'company' ,  'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country' )
