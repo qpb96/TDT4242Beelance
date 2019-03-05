@@ -25,12 +25,20 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'categories', 'company' , 'email', 'email_confirmation', 'password1', 'password2', 'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
 
+# First name and last name belongs to the User model
+class UserForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
 
+    class Meta: 
+        model = User
+        fields = ('first_name', 'last_name')
 
+# All other user fields belongs to the Profile model
 class ProfileForm(forms.ModelForm):
     company = forms.CharField(max_length=30, required=False)
     phone_number = forms.CharField(max_length=50, required=False)
-    
+
     street_address = forms.CharField(max_length=50, required=False)
     city = forms.CharField(max_length=50, required=False)
     state = forms.CharField(max_length=50, required=False)
@@ -40,4 +48,4 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('categories', 'company' ,  'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country' )
+        fields = ('categories', 'company' ,  'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
