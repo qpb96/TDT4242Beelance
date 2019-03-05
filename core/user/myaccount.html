@@ -23,5 +23,10 @@
       <h2 class="mt-5">Phone: {{ user.phone }} </h2>
     </div>
   </div>
+  <div class="row">
+    <div class="col-lg text-center">
+      <a class="btn btn-primary" role="button" href="{% url 'edit_user_profile' user_id=user.pk %}">Edit Profile</a>
+    </div>
+  </div>
 
 {% endblock %}

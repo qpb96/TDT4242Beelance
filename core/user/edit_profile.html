@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% load icons %}
+{% load project_extras %}
+{% load home_extras %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<h2 class="mt-3 text-center" >Edit Profile</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ profile_form.as_p }}
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
+{% endblock %}

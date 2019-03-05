@@ -6,7 +6,7 @@ from projects.models import ProjectCategory
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .forms import SignUpForm
+from .forms import SignUpForm, ProfileForm
 
 def index(request):
     return render(request, 'base.html')
@@ -54,3 +54,35 @@ def get_user_profile(request, username):
             "user_email": user_email,
 #            "user_phone": user_phone,
         })
+
+
+@login_required
+def edit_user_profile(request,user_id):
+    my_user = User.objects.get(pk=user_id)
+
+    if request.user == my_user:
+        if request.method == 'POST':
+            profile_form = ProfileForm(request.POST, instance=request.user.profile)  
+            if profile_form.is_valid():
+                # Must do something else here to save the actual request data... ??
+                # profile_form seems to not really be updated with anything ??? 
+                profile = profile_form.save(commit=False)
+                my_user.profile = profile
+                my_user.save()
+
+                # If successfully updated profile
+                if my_user.profile != profile:
+                    from django.contrib import messages
+                    messages.success(request, ('Your profile was successfully updated!'))
+
+                return redirect('get_user_profile', username=my_user.username)
+            else:
+                from django.contrib import messages
+                messages.error(request, ('Please fill out the fields with correct information.'))
+        else:
+            profile_form = ProfileForm(instance=my_user.profile)
+        
+        return render(request, 'user/edit_profile.html', {
+            'profile_form': profile_form
+        })
+    
