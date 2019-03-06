@@ -46,6 +46,20 @@ class ProfileForm(forms.ModelForm):
     country = forms.CharField(max_length=50, required=False)
     categories = forms.ModelMultipleChoiceField(queryset=ProjectCategory.objects.all(), required=False, help_text='Hold down "Control", or "Command" on a Mac, to select more than one.')
 
+    display_full_name = forms.BooleanField(required=False)
+    display_email= forms.BooleanField(required=False)
+    display_phone = forms.BooleanField(required=False)
+    display_company = forms.BooleanField(required=False)
+    display_country = forms.BooleanField(required=False)
+    display_street = forms.BooleanField(required=False)
+    display_postal = forms.BooleanField(required=False)
+    display_state = forms.BooleanField(required=False)
+    display_city = forms.BooleanField(required=False)
+
+
+
     class Meta:
         model = User
-        fields = ('categories', 'company' ,  'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
+        fields = ('categories', 'company' ,  'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country'
+                  , 'display_full_name', 'display_email', 'display_phone','display_company', 'display_country', 'display_street', 'display_postal',
+                  'display_state', 'display_city')

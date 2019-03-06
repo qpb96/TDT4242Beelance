@@ -53,6 +53,16 @@ def view_user_profile(request, username):
         user_postal_code = user.profile.postal_code
         user_country = user.profile.country
 
+        display_full_name = user.profile.display_full_name
+        display_email = user.profile.display_email
+        display_phone = user.profile.display_phone
+        display_company = user.profile.display_company
+        display_city = user.profile.display_street
+        display_state = user.profile.display_state
+        display_postal = user.profile.display_postal
+        display_street = user.profile.display_street
+        display_country = user.profile.display_country
+
         return render(request, 'user/userprofile.html', {
             "user_username": user_username,
             "user_first_name": user_first_name,
@@ -64,7 +74,16 @@ def view_user_profile(request, username):
             "user_city": user_city,
             "user_state": user_state,
             "user_postal_code": user_postal_code,
-            "user_country": user_country
+            "user_country": user_country,
+            "display_full_name": display_full_name,
+            'display_email': display_email,
+            'display_phone': display_phone,
+            'display_comapny': display_company,
+            'display_city': display_city,
+            'display_state': display_state,
+            'display_postal': display_postal,
+            'display_street': display_street,
+            'display_country': display_country,
         })
 
 @login_required

@@ -14,6 +14,20 @@ class Profile(models.Model):
     country = models.TextField(max_length=50, blank=True)
     categories = models.ManyToManyField('projects.ProjectCategory', related_name='competance_categories')
 
+    display_full_name = models.BooleanField(default=True)
+    display_email = models.BooleanField(default=True)
+    display_phone = models.BooleanField(default=True)
+    display_company = models.BooleanField(default=True)
+    display_country = models.BooleanField(default=True)
+    display_street = models.BooleanField(default=True)
+    display_postal = models.BooleanField(default=True)
+    display_city = models.BooleanField(default=True)
+    display_state = models.BooleanField(default=True)
+
+
+
+
+
 
 
     def __str__(self):

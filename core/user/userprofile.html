@@ -10,48 +10,66 @@
   <div class="row">
     <div class="col-lg text-center">
       <h2 class="mt-5">User: {{ user_username }} </h2>
+        {% if display_full_name %}
       <h2 class="mt-5">Name: {{user_first_name}} {{user_last_name}}</h2>
+        {% endif %}
     </div>
   </div>
 
   <div class="row">
     <div class="col-lg text-center">
+     {% if display_email %}
       <h2 class="mt-5">Email: {{ user_email }} </h2>
+     {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
-      <h2 class="mt-5">Company: {{ user_company }} </h2>
+        {% if  display_comapny %}
+        <h2 class="mt-5">Company: {{ user_company }} </h2>
+        {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
-      <h2 class="mt-5">Phone: {{ user_phone }} </h2>
+        {% if display_phone %}
+              <h2 class="mt-5">Phone: {{ user_phone }} </h2>
+        {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
-      <h2 class="mt-5">Address: {{ user_address }} </h2>
+        {% if display_street %}
+           <h2 class="mt-5">Address: {{ user_address }} </h2>
+        {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
-      <h2 class="mt-5">City: {{ user_city }} </h2>
+        {% if display_city %}
+            <h2 class="mt-5">City: {{ user_city }} </h2>
+        {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
-      <h2 class="mt-5">State: {{ user_state }} </h2>
+        {% if display_state %}
+            <h2 class="mt-5">State: {{ user_state }} </h2>
+        {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
+        {% if display_postal %}
       <h2 class="mt-5">Postal Code: {{ user_postal_code }} </h2>
+        {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col-lg text-center">
+        {% if display_country %}
       <h2 class="mt-5">Country: {{ user_country }} </h2>
+        {% endif %}
     </div>
   </div>
 {% endblock %}
