@@ -82,7 +82,7 @@
 
         {% for task_offer in task_offers %}
         {% if not task_offer.status == 'd' %}
-        <li class="list-group-item d-flex justify-content-between align-items-center"> Offer from {{task_offer.offerer.user.username}}
+        <a class="nav-link font-weight-light"  href="{% url 'view_user_profile' task_offer.offerer.user.username%}">Offer from: {{task_offer.offerer.user.username}}</a>
           <p>Status: {{task_offer.get_status_display}}</p>
           <div>
             <button class="btn btn-primary" data-toggle="modal" data-target="#seeOfferModal{{task_offer.id}}">View Offer</button>

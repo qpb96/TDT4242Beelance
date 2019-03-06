@@ -86,6 +86,9 @@ def view_user_profile(request, username):
             'display_country': display_country,
         })
 
+
+
+
 @login_required
 def edit_user_profile(request,user_id):
     my_user = User.objects.get(pk=user_id)
