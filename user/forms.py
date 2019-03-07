@@ -25,29 +25,37 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'categories', 'company' , 'email', 'email_confirmation', 'password1', 'password2', 'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
 
-# First name and last name belongs to the User model
 class UserForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
-
-    class Meta: 
-        model = User
-        fields = ('first_name', 'last_name')
-
-# All other user fields belongs to the Profile model
-class ProfileForm(forms.ModelForm):
     company = forms.CharField(max_length=30, required=False)
     phone_number = forms.CharField(max_length=50, required=False)
-
     street_address = forms.CharField(max_length=50, required=False)
     city = forms.CharField(max_length=50, required=False)
     state = forms.CharField(max_length=50, required=False)
     postal_code = forms.CharField(max_length=10, required=False)
     country = forms.CharField(max_length=50, required=False)
+
+
+    class Meta: 
+        model = User
+        fields = (
+            'first_name', 'last_name',
+            'email',
+            'company' ,               
+            'phone_number',           
+            'street_address',         
+            'city',                   
+            'state',                  
+            'postal_code',            
+            'country',                
+            )
+
+class ProfileForm(UserForm):
     categories = forms.ModelMultipleChoiceField(queryset=ProjectCategory.objects.all(), required=False, help_text='Hold down "Control", or "Command" on a Mac, to select more than one.')
 
     display_full_name = forms.BooleanField(required=False)
-    display_email= forms.BooleanField(required=False)
+    display_email = forms.BooleanField(required=False)
     display_phone = forms.BooleanField(required=False)
     display_company = forms.BooleanField(required=False)
     display_country = forms.BooleanField(required=False)
@@ -60,6 +68,15 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('categories', 'company' ,  'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country'
-                  , 'display_full_name', 'display_email', 'display_phone','display_company', 'display_country', 'display_street', 'display_postal',
-                  'display_state', 'display_city')
+        fields = (
+            'first_name', 'last_name',  'display_full_name',
+            'email',                    'display_email',
+            'categories',
+            'company' ,                 'display_company',
+            'phone_number',             'display_phone',
+            'street_address',           'display_street',
+            'city',                     'display_city',
+            'state',                    'display_state',
+            'postal_code',              'display_postal',
+            'country',                  'display_country'            
+        )
