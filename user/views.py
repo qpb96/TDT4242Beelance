@@ -40,6 +40,7 @@ def view_user_profile(request, username):
     else:
         user = get_object_or_404(User, username=username)
         return render(request, 'user/userprofile.html', {
+            "user_username": user.username,
             "user_first_name": user.first_name,
             "user_last_name": user.last_name,
             "user_email": user.email,
