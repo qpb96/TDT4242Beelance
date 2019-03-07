@@ -40,7 +40,7 @@ def view_user_profile(request, username):
         return render(request, 'user/myaccount.html')
     # View others' user profile. Need to get user info from the db.
     else:
-        user = User.objects.get(username=username)
+        user = get_object_or_404(User, username=username)
         return render(request, 'user/userprofile.html', {
             "user_first_name": user.first_name,
             "user_last_name": user.last_name,
