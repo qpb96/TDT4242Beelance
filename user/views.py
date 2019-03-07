@@ -34,11 +34,9 @@ def signup(request):
 
 @login_required
 def view_user_profile(request, username):
-    my_user = request.user.username
-    # View their own user profile. We just render request.user directly.
-    if my_user == username:
+    user = request.user.username
+    if user == username:
         return render(request, 'user/myaccount.html')
-    # View others' user profile. Need to get user info from the db.
     else:
         user = get_object_or_404(User, username=username)
         return render(request, 'user/userprofile.html', {
@@ -69,34 +67,27 @@ def view_user_profile(request, username):
 
 
 @login_required
-def edit_user_profile(request,user_id):
-    my_user = User.objects.get(pk=user_id)
+def edit_user_profile(request, user_id):
+    user = User.objects.get(pk=user_id)
 
-    if request.user == my_user:
+    if request.user == user:
         if request.method == 'POST':
-            user_form = UserForm(request.POST, instance=my_user)  # The User form is an instance of the User model
-            profile_form = ProfileForm(request.POST, instance=my_user.profile) # The Profile form is an instance of the Profile model
-            if profile_form.is_valid():
-                # Set new user.first_name and last_name
-                new_user_info = user_form.save(commit=False)
-                my_user.first_name = new_user_info.first_name
-                my_user.last_name = new_user_info.last_name
-
-                # Set new user.profile.company, user.profile.phone_number, etc. 
-                new_profile = profile_form.save(commit=False)
-                my_user.profile = new_profile
-
-                my_user.save()
+            user_form = UserForm(request.POST, instance=user)
+            profile_form = ProfileForm(request.POST, instance=user.profile)
+            if profile_form.is_valid() and user_form.is_valid():
+                user_form.save(commit=False)
+                profile_form.save(commit=False)
+                user.save()
 
                 from django.contrib import messages
                 messages.success(request, ('Your profile was successfully updated!'))
-                return redirect('view_user_profile', username=my_user.username)
+                return redirect('view_user_profile', username=user.username)
             else:
                 from django.contrib import messages
                 messages.error(request, ('Please fill out the fields with correct information.'))
         else:
-            user_form = UserForm(instance=my_user)
-            profile_form = ProfileForm(instance=my_user.profile)
+            user_form = UserForm(instance=user)
+            profile_form = ProfileForm(instance=user.profile)
         
         return render(request, 'user/edit_profile.html', {
             'user_form': user_form,

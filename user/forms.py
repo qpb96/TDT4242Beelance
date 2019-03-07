@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from projects.models import ProjectCategory
+from projects.models import ProjectCategory, Profile
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
@@ -26,54 +26,21 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'categories', 'company' , 'email', 'email_confirmation', 'password1', 'password2', 'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
 
 class UserForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=30, required=False)
-    last_name = forms.CharField(max_length=30, required=False)
-    company = forms.CharField(max_length=30, required=False)
-    phone_number = forms.CharField(max_length=50, required=False)
-    street_address = forms.CharField(max_length=50, required=False)
-    city = forms.CharField(max_length=50, required=False)
-    state = forms.CharField(max_length=50, required=False)
-    postal_code = forms.CharField(max_length=10, required=False)
-    country = forms.CharField(max_length=50, required=False)
-
-
     class Meta: 
-        model = User
-        fields = (
-            'first_name', 'last_name',
-            'email',
-            'company' ,               
-            'phone_number',           
-            'street_address',         
-            'city',                   
-            'state',                  
-            'postal_code',            
-            'country',                
-            )
+        model = User    
+        fields = ('first_name', 'last_name', 'email',)
 
-class ProfileForm(UserForm):
+class ProfileForm(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(queryset=ProjectCategory.objects.all(), required=False, help_text='Hold down "Control", or "Command" on a Mac, to select more than one.')
 
-    display_full_name = forms.BooleanField(required=False)
-    display_email = forms.BooleanField(required=False)
-    display_phone = forms.BooleanField(required=False)
-    display_company = forms.BooleanField(required=False)
-    display_country = forms.BooleanField(required=False)
-    display_street = forms.BooleanField(required=False)
-    display_postal = forms.BooleanField(required=False)
-    display_state = forms.BooleanField(required=False)
-    display_city = forms.BooleanField(required=False)
-
-
-
-    class Meta:
-        model = User
+    class Meta: 
+        model = Profile
         fields = (
-            'first_name', 'last_name',  'display_full_name',
-            'email',                    'display_email',
+            'display_full_name',
+            'display_email',
             'categories',
-            'company' ,                 'display_company',
             'phone_number',             'display_phone',
+            'company' ,                 'display_company',
             'street_address',           'display_street',
             'city',                     'display_city',
             'state',                    'display_state',
