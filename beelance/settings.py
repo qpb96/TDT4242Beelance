@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_icons',
     'payment.apps.PaymentConfig',
-    'constance',
-    'constance.backends.database',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +67,6 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'constance.context_processors.config',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -169,26 +166,3 @@ if is_prod:
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None)
 
     django_heroku.settings(locals())
-
-# DYNAMIC GLOBAL CONFIGURABLE SETTINGS
-# See https://django-constance.readthedocs.io/en/latest/
-
-CONSTANCE_CONFIG = {
-    'PROMOTION_POOL_SIZE': (
-        20, 'The amount of promotions available per project category. WARNING: ' \
-            + 'PROMOTION_POOL_SIZE must be bigger than PROMOTION_DISPLAY_AMOUNT'),
-    'PROMOTION_DISPLAY_AMOUNT': (
-        3, 'The amount of promotions displayed to the user per category. WARNING: ' \
-            + 'PROMOTION_POOL_SIZE must be bigger than PROMOTION_DISPLAY_AMOUNT'),
-    'PROMOTION_FEE': (100, 'The fee for promoting a project.'),
-    'PROMOTION_DURATION_IN_DAYS': (14, 'The number of days the promotion will last.')
-}
-
-CONSTANCE_CONFIG_FIELDSETS = {
-    'Promotion options': (
-        'PROMOTION_POOL_SIZE',
-        'PROMOTION_DISPLAY_AMOUNT',
-        'PROMOTION_FEE'),
-}
-
-CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'

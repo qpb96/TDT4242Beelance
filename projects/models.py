@@ -1,11 +1,11 @@
 from django.db import models
 from user.models import Profile
+from util.models import SingletonModel
 
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 import os
 
-from constance import config
 from datetime import datetime, timedelta
 
 class OverwriteStorage(FileSystemStorage):
@@ -62,14 +62,23 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+class PromotionSettings(SingletonModel):
+    pool_size = models.IntegerField(default=20)
+    display_amount = models.IntegerField(default=1)
+    promotion_fee = models.IntegerField(default=0.0)
+    duration_in_days = models.IntegerField(default=7)
+
+    def __str__(self):
+        return "Promotion Settings"
 
 class PromotedProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="promoted_projects")
     start = models.DateTimeField(auto_now_add=True, blank=True)
 
     def end(self):
+        promotion_settings = PromotionSettings.load()
         if self.start is not None:
-            return self.start + timedelta(days=config.PROMOTION_DURATION_IN_DAYS)
+            return self.start + timedelta(days=promotion_settings.duration_in_days)
         else:
             return "-"
             

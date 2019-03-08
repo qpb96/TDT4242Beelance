@@ -1,19 +1,19 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Project, PromotedProject, Task, TaskFile, TaskOffer, Delivery, ProjectCategory, Team, TaskFileTeam, directory_path
+from .models import Project, PromotionSettings, PromotedProject, Task, TaskFile, TaskOffer, Delivery, ProjectCategory, Team, TaskFileTeam, directory_path
 from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, TaskOfferResponseForm, TaskPermissionForm, DeliveryForm, TaskDeliveryResponseForm, TeamForm, TeamAddForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from user.models import Profile
-from constance import config    # lazy loading
 
 def projects(request):
+    promotion_settings = PromotionSettings.load()
     project_categories = ProjectCategory.objects.all()
 
     promoted_projects = []
     for category in project_categories:
         selection = PromotedProject.objects.all().filter(project__category=category)
-        selection = selection.order_by('?')[0:config.PROMOTION_DISPLAY_AMOUNT]
+        selection = selection.order_by('?')[0:promotion_settings.display_amount]
         promoted_projects.extend(selection)
 
     projects = Project.objects.all().exclude(id__in=[p.project.id for p in promoted_projects])
@@ -71,7 +71,6 @@ def new_project(request):
 
 def project_view(request, project_id):
     project = Project.objects.get(pk=project_id)
-    #TODO: add filter on promoted items and non promo items
     tasks = project.tasks.all()
     total_budget = 0
 

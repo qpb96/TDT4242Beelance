@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Project, PromotedProject, Task, TaskFile, Delivery, ProjectCategory, Team, TaskFileTeam
+from .models import Project, PromotedProject, PromotionSettings, Task, TaskFile, Delivery, ProjectCategory, Team, TaskFileTeam
 
 
 class TaskInline(admin.TabularInline):
@@ -22,7 +22,11 @@ class PromotedProjectAdmin(admin.ModelAdmin):
         ("Project details",         {'fields': ['project']}),
     ]
 
+class PromotionSettingsAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'pool_size', 'display_amount', 'duration_in_days','promotion_fee')
+
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(PromotionSettings, PromotionSettingsAdmin)
 admin.site.register(PromotedProject, PromotedProjectAdmin)
 admin.site.register(Task)
 admin.site.register(TaskFile)
