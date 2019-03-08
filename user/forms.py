@@ -25,10 +25,12 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'categories', 'company' , 'email', 'email_confirmation', 'password1', 'password2', 'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
 
+
 class UserForm(forms.ModelForm):
     class Meta: 
         model = User    
         fields = ('first_name', 'last_name', 'email',)
+
 
 class ProfileForm(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(queryset=ProjectCategory.objects.all(), required=False, help_text='Hold down "Control", or "Command" on a Mac, to select more than one.')
