@@ -6,7 +6,7 @@ from projects.models import ProjectCategory
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .forms import SignUpForm, ProfileForm, UserForm
+from .forms import SignUpForm, EditProfileForm, UserForm
 
 def index(request):
     return render(request, 'base.html')
@@ -74,7 +74,7 @@ def edit_user_profile(request, user_id):
     if request.user == user:
         if request.method == 'POST':
             user_form = UserForm(request.POST, instance=user)
-            profile_form = ProfileForm(request.POST, instance=user.profile)
+            profile_form = EditProfileForm(request.POST, instance=user.profile)
             if profile_form.is_valid() and user_form.is_valid():
                 user_form.save(commit=False)
                 profile_form.save(commit=False)
@@ -88,7 +88,7 @@ def edit_user_profile(request, user_id):
                 messages.error(request, ('Please fill out the fields with correct information.'))
         else:
             user_form = UserForm(instance=user)
-            profile_form = ProfileForm(instance=user.profile)
+            profile_form = EditProfileForm(instance=user.profile)
         
         return render(request, 'user/edit_profile.html', {
             'user_form': user_form,
