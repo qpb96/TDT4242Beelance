@@ -94,4 +94,3 @@ def edit_user_profile(request, user_id):
             'user_form': user_form,
             'profile_form': profile_form
         })
-    
