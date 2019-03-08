@@ -26,11 +26,16 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'categories', 'company' , 'email', 'email_confirmation', 'password1', 'password2', 'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
 
 class UserForm(forms.ModelForm):
+    # Need to define these fields as CharField to retrieve them as text fields in edit_profile.html
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    email = forms.EmailField(max_length=254, help_text='Inform a valid email address.')
+
     class Meta: 
         model = User    
         fields = ('first_name', 'last_name', 'email',)
 
-class ProfileForm(forms.ModelForm):
+class EditProfileForm(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(queryset=ProjectCategory.objects.all(), required=False, help_text='Hold down "Control", or "Command" on a Mac, to select more than one.')
 
     class Meta: 
