@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from projects.models import ProjectCategory
+from projects.models import ProjectCategory, Profile
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
@@ -24,3 +24,28 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'categories', 'company' , 'email', 'email_confirmation', 'password1', 'password2', 'phone_number', 'street_address', 'city', 'state', 'postal_code', 'country')
+
+
+class UserForm(forms.ModelForm):
+    class Meta: 
+        model = User    
+        fields = ('first_name', 'last_name', 'email',)
+
+
+class ProfileForm(forms.ModelForm):
+    categories = forms.ModelMultipleChoiceField(queryset=ProjectCategory.objects.all(), required=False, help_text='Hold down "Control", or "Command" on a Mac, to select more than one.')
+
+    class Meta: 
+        model = Profile
+        fields = (
+            'display_full_name',
+            'display_email',
+            'categories',
+            'phone_number',             'display_phone',
+            'company' ,                 'display_company',
+            'street_address',           'display_street',
+            'city',                     'display_city',
+            'state',                    'display_state',
+            'postal_code',              'display_postal',
+            'country',                  'display_country'            
+        )
