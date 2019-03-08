@@ -10,6 +10,7 @@
 
 {% block content %}
   <h3 class="my-3">{{ project.title }}</h3>
+  <p>Posted by: <a href="{% url 'view_user_profile' project.user.user.username %}">{{project.user.user.username}}</a></p>
   <p>Project status: {{project.get_status_display}}</p>
 
   <p>Project total budget: {{total_budget}}</p>
