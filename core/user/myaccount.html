@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% load icons %}
+{% load project_extras %}
+{% load home_extras %}
+
+{% block title %}Account{% endblock %}
+{% block content %}
+<div class="row">
+  <!-- Left column's box contains user's full name -->
+  <div class="col">
+    <h5 class="mt-5">{{user.first_name}} {{user.last_name}} <img class="ml-1 honey" src="{% static 'img/honeybee.png' %}" alt="Image of a honeybee."/></h5>
+  </div>
+  <!-- Right column's box contains the "Edit Profile" button -->
+  <div class="col pt-5">
+    <a class="btn btn-primary mr-auto" role="button" href="{% url 'edit_user_profile' user_id=user.pk %}">Edit Profile</a>
+  </div>
+</div>
+
+<!-- Set a div box of height = 100% for the user profile-->
+<div class="h-100">
+  <div class="row mt-1">
+    <h5 class="ml-3 font-weight-bold">Username:</h5>
+    <h5 class="ml-2"> {{ user.username }} </h5>
+  </div>
+  <div class="row mt-1">
+    <h5 class="ml-3 font-weight-bold">Email:</h5>
+    <h5 class="ml-2"> {{ user.email }} </h5>
+  </div>
+  <div class="row mt-1">
+    <h5 class="font-weight-bold ml-3">Company:</h5>
+    <h5 class="ml-2"> {{ user.profile.company }} </h5> 
+  </div>
+  <div class="row mt-1">
+    <h5 class="font-weight-bold ml-3">Phone:</h5>
+    <h5 class="ml-2"> {{ user.profile.phone_number }} </h5> 
+  </div>
+  <div class="row mt-1">
+    <h5 class="font-weight-bold ml-3">Address:</h5>
+    <h5 class="ml-2"> {{ user.profile.street_address }} </h5> 
+  </div>
+  <div class="row mt-1">
+    <h5 class="font-weight-bold ml-3">City:</h5>
+    <h5 class="ml-2"> {{ user.profile.city }} </h5> 
+  </div>
+  <div class="row mt-1">
+    <h5 class="font-weight-bold ml-3">State:</h5>
+    <h5 class="ml-2"> {{ user.profile.state }} </h5> 
+  </div>
+  <div class="row mt-1">
+    <h5 class="font-weight-bold ml-3">Postal code:</h5>
+    <h5 class="ml-2"> {{ user.profile.postal_code }} </h5> 
+  </div>
+</div>
+
+<!-- Review box(es) goes under the user profile-->
+
+{% endblock %}
