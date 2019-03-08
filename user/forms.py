@@ -36,12 +36,7 @@ class UserForm(forms.ModelForm):
         model = User    
         fields = ('first_name', 'last_name', 'email',)
 
-<<<<<<< HEAD
 class EditProfileForm(forms.ModelForm):
-=======
-
-class ProfileForm(forms.ModelForm):
->>>>>>> 94f9e604ebdd2c55b805e3abec30bd37cc9c7a34
     categories = forms.ModelMultipleChoiceField(queryset=ProjectCategory.objects.all(), required=False, help_text='Hold down "Control", or "Command" on a Mac, to select more than one.')
 
     class Meta: 
