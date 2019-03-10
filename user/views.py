@@ -9,7 +9,9 @@ from django.contrib import messages
 from django.utils import timezone
 
 
+
 from .forms import SignUpForm, EditProfileForm, UserForm, PostReviewForm
+from projects.models import Project
 from .models import Review
 
 def index(request):
@@ -43,12 +45,13 @@ def view_user_profile(request, username):
         return render(request, 'user/myaccount.html')
     else:
         user = get_object_or_404(User, username=username)
+        print(user.username)
+        review_available = isAnyProjectFinished(request, user.username)
         return render(request, 'user/userprofile.html', {
             "user_username": user.username,
             "user_first_name": user.first_name,
             "user_last_name": user.last_name,
             "user_email": user.email,
-            "user_username": user.username,
             "user_company": user.profile.company,
             "user_phone": user.profile.phone_number,
             "user_address": user.profile.street_address,
@@ -66,6 +69,7 @@ def view_user_profile(request, username):
             "display_postal": user.profile.display_postal,
             "display_street": user.profile.display_street,
             "display_country": user.profile.display_country,
+            "review_available": review_available,
         })
 
 
@@ -101,8 +105,7 @@ def edit_user_profile(request, user_id):
 
 def createReview(request, username):
     profile = User.objects.get(username=username)
-    print(profile)
-    print("done")
+    participantInProject(request, username)
     form = PostReviewForm(request.POST)
     if request.method == 'POST':
         form = PostReviewForm(request.POST)
@@ -118,3 +121,35 @@ def createReview(request, username):
             form = PostReviewForm()
 
     return render(request, 'user/add_review.html', {'form': form, })
+
+#Check if there exist any finished projects where request.user is a participant
+def isAnyProjectFinished(request, projectOwner):
+    if participantInProject(request, projectOwner):
+        projects = ProjectByUser(projectOwner)
+        for project in projects:
+            if project.status == 'f':
+                return True
+    return False
+
+
+#See if request.user is a participant in any project of <username>
+def participantInProject(request, projectOwner):
+    projects = ProjectByUser(projectOwner)
+    for project in projects:
+        myParticipant = project.participants.all()
+        for participant in myParticipant:
+            if(request.user.profile == participant):
+                return True
+    return False
+
+#Search for all projects made by a user
+def ProjectByUser(username):
+    list_of_projects = Project.objects.all()
+    projects_by_user = []
+    for project in list_of_projects:
+        if(project.user.user.username == username):
+            projects_by_user.append(project)
+    return projects_by_user
+
+
+

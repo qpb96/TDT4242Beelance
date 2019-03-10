@@ -68,7 +68,9 @@
     <h5 class="ml-3 font-weight-bold">Country:</h5>
     <h5 class="ml-2"> {{ user_country }}</h5>
     {% endif %}
+  {% if review_available %}
    <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  user_username  %}">Add Review</a>
+  {% endif %}
   </div>
 </div>
 {% endblock %}
