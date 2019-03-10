@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from projects.models import ProjectCategory, Profile
+from .models import Review
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
@@ -53,3 +54,9 @@ class EditProfileForm(forms.ModelForm):
             'postal_code',              'display_postal',
             'country',                  'display_country'            
         )
+
+
+class PostReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['title', 'body']

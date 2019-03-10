@@ -5,8 +5,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from projects.models import ProjectCategory
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.utils import timezone
 
-from .forms import SignUpForm, EditProfileForm, UserForm
+
+from .forms import SignUpForm, EditProfileForm, UserForm, PostReviewForm
+from .models import Review
 
 def index(request):
     return render(request, 'base.html')
@@ -80,11 +84,10 @@ def edit_user_profile(request, user_id):
                 profile_form.save(commit=False)
                 user.save()
 
-                from django.contrib import messages
+
                 messages.success(request, ('Your profile was successfully updated!'))
                 return redirect('view_user_profile', username=user.username)
             else:
-                from django.contrib import messages
                 messages.error(request, ('Please fill out the fields with correct information.'))
         else:
             user_form = UserForm(instance=user)
@@ -94,3 +97,24 @@ def edit_user_profile(request, user_id):
             'user_form': user_form,
             'profile_form': profile_form
         })
+
+
+def createReview(request, username):
+    profile = User.objects.get(username=username)
+    print(profile)
+    print("done")
+    form = PostReviewForm(request.POST)
+    if request.method == 'POST':
+        form = PostReviewForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.reviewed = profile
+            instance.author = username
+            instance.date = timezone.now()
+            instance.save()
+            messages.success(request, ('Review successfully posted '))
+            return redirect('view_user_profile', username=username)
+        else:
+            form = PostReviewForm()
+
+    return render(request, 'user/add_review.html', {'form': form, })
