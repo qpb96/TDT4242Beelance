@@ -1,7 +1,6 @@
 from django.contrib import admin
-
 from .models import Project, PromotedProject, PromotionSettings, Task, TaskFile, Delivery, ProjectCategory, Team, TaskFileTeam
-
+from util.admin import SingletonModelAdmin
 
 class TaskInline(admin.TabularInline):
     model = Task
@@ -22,7 +21,7 @@ class PromotedProjectAdmin(admin.ModelAdmin):
         ("Project details",         {'fields': ['project']}),
     ]
 
-class PromotionSettingsAdmin(admin.ModelAdmin):
+class PromotionSettingsAdmin(SingletonModelAdmin):
     list_display = ('__str__', 'pool_size', 'display_amount', 'duration_in_days','promotion_fee')
 
 admin.site.register(Project, ProjectAdmin)
