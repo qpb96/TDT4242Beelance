@@ -41,6 +41,7 @@ def signup(request):
 @login_required
 def view_user_profile(request, username):
     user = request.user.username
+    reviews = Review
     if user == username:
         return render(request, 'user/myaccount.html')
     else:
