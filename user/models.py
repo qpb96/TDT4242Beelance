@@ -44,4 +44,4 @@ class Review(models.Model):
     date = models.DateTimeField(timezone.now())
 
     def __str__(self):
-        return self.author
+        return self.title
