@@ -194,7 +194,7 @@ def tasks_by_user(username):
         tasks = tasks_of_project(project.title)
         for task in tasks:
             list_tasks.append(task)
-    return tasks
+    return list_tasks
 
 
 def check_user_in_task(request, taskobject):
