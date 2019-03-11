@@ -44,7 +44,7 @@ def signup(request):
 def view_user_profile(request, username):
     user = request.user.username
     vieweduser = User.objects.get(username=username)
-    reviews = Review.objects.all().filter(reviewed=vieweduser)
+    reviews = Review.objects.all().filter(reviewed=vieweduser).order_by("-date")
     if user == username:
         return render(request, 'user/myaccount.html')
     else:
