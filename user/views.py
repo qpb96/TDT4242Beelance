@@ -41,12 +41,12 @@ def signup(request):
 @login_required
 def view_user_profile(request, username):
     user = request.user.username
-    reviews = Review.objects.all()
+    vieweduser = User.objects.get(username=username)
+    reviews = Review.objects.all().filter(reviewed=vieweduser)
     if user == username:
         return render(request, 'user/myaccount.html')
     else:
         user = get_object_or_404(User, username=username)
-        print(user.username)
         review_available = isAnyProjectFinished(request, user.username)
         return render(request, 'user/userprofile.html', {
             "user_username": user.username,
