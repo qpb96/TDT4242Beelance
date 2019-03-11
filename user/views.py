@@ -41,11 +41,15 @@ def signup(request):
 @login_required
 def view_user_profile(request, username):
     user = request.user.username
+    vieweduser = User.objects.get(username=username)
+    reviews = Review.objects.all().filter(reviewed=vieweduser)
     if user == username:
         return render(request, 'user/myaccount.html')
     else:
         user = get_object_or_404(User, username=username)
+
         review_available = review_possible(request, user.username)
+
         return render(request, 'user/userprofile.html', {
             "user_username": user.username,
             "user_first_name": user.first_name,
@@ -58,6 +62,7 @@ def view_user_profile(request, username):
             "user_state": user.profile.state,
             "user_postal_code": user.profile.postal_code,
             "user_country": user.profile.country,
+            "reviews": reviews,
 
             "display_full_name": user.profile.display_full_name,
             "display_email": user.profile.display_email,

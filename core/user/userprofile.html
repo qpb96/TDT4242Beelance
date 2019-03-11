@@ -72,5 +72,18 @@
    <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  user_username  %}">Add Review</a>
   {% endif %}
   </div>
+  <div class="row mt-1">
+    <h5 class="ml-3 font-weight-bold">Reviews:</h5>
+  </div>
+  <div>
+      {% for review in reviews %}
+      <h6>{{review.title}}</h6>
+      {{review.body}}
+      <br>
+      <br>
+      {% endfor %}
+
+  </div>
+
 </div>
 {% endblock %}
