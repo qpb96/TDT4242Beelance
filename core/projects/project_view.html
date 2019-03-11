@@ -130,7 +130,7 @@
 
         {% else %}
 
-        <p>Project participants: {{ project|get_project_participants_string}}</p>
+        <p>Project participants: <a href="{% url 'view_user_profile' project|get_project_participants_string %}"> {{project|get_project_participants_string}} </a></p>
 
           <h3 class="mb-3 mt-5">List of Tasks</h3>
           <div class="list-group">

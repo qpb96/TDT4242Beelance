@@ -10,7 +10,7 @@
 {% define task|get_accepted_task_offer as task_accepted_offer %}
   <h3 class="my-3">{{ task.title }}</h3>
   <p>Task status: {{task.get_status_display}}</p>
-  <p>Solver: {{task_accepted_offer.offerer.user.username}}</p>
+  <p>Solver: <a href="{% url 'view_user_profile' task_accepted_offer.offerer.user.username %}"> {{task_accepted_offer.offerer.user.username}}</a></p>
 
   <p>Original task budget: {{task.budget}} </p>
   <p>Agreed payment: {{task_accepted_offer.price}}</p>
@@ -232,19 +232,19 @@
         <h2>read</h2>
         {% for user_profile in task.read.all %}
           <div>
-                {{user_profile.user.username}}
+              <p> <a href="{% url 'view_user_profile' user_profile.user.username %}"> {{user_profile.user.username}}</a></p>
           </div>
         {% endfor %}
         <h2>write</h2>
         {% for user_profile in task.write.all %}
           <div>
-                {{user_profile.user.username}}
+                <p> <a href="{% url 'view_user_profile' user_profile.user.username %}"> {{user_profile.user.username}}</a></p>
           </div>
         {% endfor %}
         <h2>modify</h2>
         {% for user_profile in task.odify.all %}
           <div>
-                {{user_profile.user.username}}
+                <p> <a href="{% url 'view_user_profile' user_profile.user.username %}"> {{user_profile.user.username}}</a></p>
           </div>
         {% endfor %}
         <a class="btn btn-default" role="button" href="{% url 'task_permissions' project_id=project.id task_id=task.id%}">Give permission</a>
