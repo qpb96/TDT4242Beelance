@@ -9,13 +9,14 @@ from django.contrib import messages
 from django.utils import timezone
 
 
-
 from .forms import SignUpForm, EditProfileForm, UserForm, PostReviewForm
-from projects.models import Project, Task
+from user import participant_review, customer_review
 from .models import Review
+
 
 def index(request):
     return render(request, 'base.html')
+
 
 def signup(request):
     if request.method == 'POST':
@@ -38,6 +39,7 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'user/signup.html', {'form': form})
 
+
 @login_required
 def view_user_profile(request, username):
     user = request.user.username
@@ -48,7 +50,8 @@ def view_user_profile(request, username):
     else:
         user = get_object_or_404(User, username=username)
 
-        review_available = review_possible(request, user.username)
+        review_available_p = participant_review.review_possible(request, user.username)
+        review_available_c = customer_review.review_possible(request, user.username)
 
         return render(request, 'user/userprofile.html', {
             "user_username": user.username,
@@ -73,7 +76,8 @@ def view_user_profile(request, username):
             "display_postal": user.profile.display_postal,
             "display_street": user.profile.display_street,
             "display_country": user.profile.display_country,
-            "review_available": review_available,
+            "review_available_c": review_available_c,
+            "review_available_p": review_available_p,
         })
 
 
@@ -92,7 +96,6 @@ def edit_user_profile(request, user_id):
                 profile_form.save(commit=False)
                 user.save()
 
-
                 messages.success(request, ('Your profile was successfully updated!'))
                 return redirect('view_user_profile', username=user.username)
             else:
@@ -107,7 +110,7 @@ def edit_user_profile(request, user_id):
         })
 
 
-def createReview(request, username):
+def make_review(request, username):
     profile = User.objects.get(username=username)
     form = PostReviewForm(request.POST)
     if request.method == 'POST':
@@ -118,95 +121,10 @@ def createReview(request, username):
             instance.author = username
             instance.date = timezone.now()
             instance.save()
-            messages.success(request, ('Review successfully posted '))
+            messages.success(request, 'Review successfully posted ')
             return redirect('view_user_profile', username=username)
         else:
             form = PostReviewForm()
 
     return render(request, 'user/add_review.html', {'form': form, })
 
-
-def review_possible(request, project_owner):
-    if is_any_project_finished(request, project_owner) or task_delivered_or_declined(request, project_owner):
-        return True
-    return False
-
-
-# Check status of a task. Return True if task.status = delivered or declined
-def task_delivered_or_declined(request, project_owner):
-    tasks = tasks_by_user(project_owner)
-    for task in tasks:
-        print("""""""")
-        print(task)
-        if check_user_in_task(request, task):
-            print("user in task")
-            if task.status == 'pa' or task.status == 'dd':
-                return True
-    print("RIIIIIP")
-    return False
-
-
-# Check if there exist any finished projects where request.user is a participant
-def is_any_project_finished(request, project_owner):
-    if participant_in_project(request, project_owner):
-        projects = project_by_user(project_owner)
-        for project in projects:
-            if project.status == 'f':
-                return True
-    return False
-
-
-# See if request.user is a participant in any project of <username>
-def participant_in_project(request, project_owner):
-    projects = project_by_user(project_owner)
-    for project in projects:
-        all_participants = project.participants.all()
-        for participant in all_participants:
-            if request.user.profile == participant:
-                return True
-    return False
-
-
-# Search for all projects made by a user
-def project_by_user(username):
-    list_of_projects = Project.objects.all()
-    projects_by_user = []
-    for project in list_of_projects:
-        if project.user.user.username == username:
-            projects_by_user.append(project)
-    return projects_by_user
-
-
-def tasks_of_project(project_name):
-    project = Project.objects.get(title=project_name)
-    tasks_of_project = []
-    project_tasks = project.tasks.all()
-    print(project_tasks)
-    for task in project_tasks:
-        tasks_of_project.append(task)
-    return tasks_of_project
-
-
-def tasks_by_user(username):
-    projects = project_by_user(username)
-    list_tasks = []
-    for project in projects:
-        tasks = tasks_of_project(project.title)
-        for task in tasks:
-            list_tasks.append(task)
-    return list_tasks
-
-
-def check_user_in_task(request, taskobject):
-    all_tasks = Task.objects.all()
-    task1 = None
-    participants = None
-    for t in all_tasks:
-        if taskobject == t:
-            task1 = t;
-            participants = task1.read.all()
-    print(participants)
-    for profile in participants:
-        if request.user.profile == profile:
-            return True
-    return False

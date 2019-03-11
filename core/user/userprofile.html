@@ -68,7 +68,7 @@
     <h5 class="ml-3 font-weight-bold">Country:</h5>
     <h5 class="ml-2"> {{ user_country }}</h5>
     {% endif %}
-  {% if review_available %}
+  {% if review_available_c or review_available_p %}
    <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  user_username  %}">Add Review</a>
   {% endif %}
   </div>
