@@ -1,6 +1,7 @@
 from django.db import models
 from user.models import Profile
 from util.models import SingletonModel
+from django.core.exceptions import ValidationError
 
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -70,6 +71,25 @@ class PromotionSettings(SingletonModel):
 
     def __str__(self):
         return "Promotion Settings"
+
+    def clean(self):
+        validation_errors = []
+        if self.pool_size < self.display_amount:
+            validation_errors.append(ValidationError("Pool size cannot be smaller than Display amount"))
+        if self.isNegative(self.pool_size):
+            validation_errors.append(ValidationError("Pool size cannot be negative."))
+        if self.isNegative(self.display_amount):
+            validation_errors.append(ValidationError("Display amount cannot be negative."))
+        if self.isNegative(self.promotion_fee):
+            validation_errors.append(ValidationError("Promotion fee cannot be negative."))
+        if self.duration_in_days < 1:
+            validation_errors.append(ValidationError("Duration in days must have a valid duration length."))
+
+        if len(validation_errors) > 0:
+            raise ValidationError(validation_errors)
+
+    def isNegative(self, number):
+        return number < 0
 
 class PromotedProject(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="promoted_projects")
