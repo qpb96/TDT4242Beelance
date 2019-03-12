@@ -42,6 +42,7 @@ class Review(models.Model):
     title = models.CharField(max_length=100, default=None)
     body = models.TextField(max_length=1500, default=None)
     date = models.DateTimeField(timezone.now())
+    project = models.CharField(max_length=100, default=None)
 
     def __str__(self):
         return self.title

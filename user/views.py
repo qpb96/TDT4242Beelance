@@ -10,9 +10,9 @@ from django.utils import timezone
 
 
 from .forms import SignUpForm, EditProfileForm, UserForm, PostReviewForm
-from user import participant_review, customer_review
-from .models import Review
 
+from .models import Review
+from projects.models import Project
 
 def index(request):
     return render(request, 'base.html')
@@ -50,9 +50,6 @@ def view_user_profile(request, username):
     else:
         user = get_object_or_404(User, username=username)
 
-        review_available_p = participant_review.review_possible(request, user.username)
-        review_available_c = customer_review.review_possible(request, user.username)
-
         return render(request, 'user/userprofile.html', {
             "user_username": user.username,
             "user_first_name": user.first_name,
@@ -76,8 +73,7 @@ def view_user_profile(request, username):
             "display_postal": user.profile.display_postal,
             "display_street": user.profile.display_street,
             "display_country": user.profile.display_country,
-            "review_available_c": review_available_c,
-            "review_available_p": review_available_p,
+
         })
 
 
@@ -110,15 +106,18 @@ def edit_user_profile(request, user_id):
         })
 
 
-def make_review(request, username):
+
+def write_review(request, username, project_id):
     profile = User.objects.get(username=username)
     form = PostReviewForm(request.POST)
     if request.method == 'POST':
         form = PostReviewForm(request.POST)
         if form.is_valid():
+            project = Project.objects.get(id=project_id)
             instance = form.save(commit=False)
             instance.reviewed = profile
-            instance.author = username
+            instance.author = request.user.username
+            instance.project = project
             instance.date = timezone.now()
             instance.save()
             messages.success(request, 'Review successfully posted ')
@@ -126,5 +125,5 @@ def make_review(request, username):
         else:
             form = PostReviewForm()
 
-    return render(request, 'user/add_review.html', {'form': form, })
+    return render(request, 'user/write_review.html', {'form': form, })
 

@@ -68,18 +68,19 @@
     <h5 class="ml-3 font-weight-bold">Country:</h5>
     <h5 class="ml-2"> {{ user_country }}</h5>
     {% endif %}
-  {% if review_available_c or review_available_p %}
-   <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  user_username  %}">Add Review</a>
-  {% endif %}
   </div>
   <div class="row mt-1">
     <h5 class="ml-3 font-weight-bold">Reviews:</h5>
   </div>
   <div>
       {% for review in reviews %}
-      <h6>{{review.title}}</h6>
-      {{review.body}}
-    {{review.date}}
+
+      <p>Project: {{ review.project }}</p>
+      <p>author:  <a href="{% url 'view_user_profile' review.author%}">{{review.author}}</a></p>
+      <h5>{{review.title}}</h5>
+      <p>{{ review.body }}</p>
+      <p>{{ review.date }}</p>
+
       <br>
       <br>
       {% endfor %}
