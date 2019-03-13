@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
+from django.core.mail import send_mail
 
 
 from .forms import SignUpForm, EditProfileForm, UserForm, PostReviewForm
@@ -121,6 +122,13 @@ def write_review(request, username, project_id):
             instance.date = timezone.now()
             instance.save()
             messages.success(request, 'Review successfully posted ')
+            send_mail(
+                str(request.user.username)+ " posted a review " ,
+                'A review has been posted on your profile',
+                'from@example.com',
+                [str(profile.email)],
+                fail_silently=False,
+            )
             return redirect('view_user_profile', username=username)
         else:
             form = PostReviewForm()
