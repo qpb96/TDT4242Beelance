@@ -125,7 +125,7 @@ def write_review(request, username, project_id):
             send_mail(
                 str(request.user.username)+ " posted a review " ,
                 'A review has been posted on your profile',
-                'from@example.com',
+                'glanceDJ@gmail.com',
                 [str(profile.email)],
                 fail_silently=False,
             )
