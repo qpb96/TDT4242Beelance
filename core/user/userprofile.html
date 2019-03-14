@@ -10,7 +10,7 @@
 
 <div class="row">
 <div class="col">
-  <h2 class="mt-5">{{ user_username }}'s profile <img class="ml-1 honey" src="{% static 'img/honeybee.png' %}" alt="Image of a honeybee."/></h5>
+  <h5 class="mt-5">{{ user_username }}'s profile <img class="ml-1 honey" src="{% static 'img/honeybee.png' %}" alt="Image of a honeybee."/></h5>
 </div>
 </div>
 
@@ -69,5 +69,23 @@
     <h5 class="ml-2"> {{ user_country }}</h5>
     {% endif %}
   </div>
+  <div class="row mt-1">
+    <h5 class="ml-3 font-weight-bold">Reviews:</h5>
+  </div>
+  <div>
+      {% for review in reviews %}
+
+      <p>Project: {{ review.project }}</p>
+      <p>author:  <a href="{% url 'view_user_profile' review.author%}">{{review.author}}</a></p>
+      <h5>{{review.title}}</h5>
+      <p>{{ review.body }}</p>
+      <p>{{ review.date }}</p>
+
+      <br>
+      <br>
+      {% endfor %}
+
+  </div>
+
 </div>
 {% endblock %}

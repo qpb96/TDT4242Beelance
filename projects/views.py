@@ -5,6 +5,7 @@ from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from user.models import Profile
+from . import review
 
 def projects(request):
     projects = Project.objects.all()
@@ -64,11 +65,25 @@ def project_view(request, project_id):
     tasks = project.tasks.all()
     total_budget = 0
 
+    review_available = review.review_possible(request, project_id)
+    is_customer = review.is_customer(request, project_id)
+
+
     for item in tasks:
         total_budget += item.budget
 
+    participants_reviewable = []
     if request.user == project.user.user:
-
+        tasks = review.get_tasks(project_id)
+        for task in tasks:
+            print("lool")
+            print(task)
+            t = Task.objects.get(title=task.title)
+            print(t)
+            if review.task_delivered_or_declined(project_id, t.title):
+                participants = review.participants_reviewable(project_id, t.title)
+                for p in participants:
+                    participants_reviewable.append(p)
         if request.method == 'POST' and 'offer_response' in request.POST:
             instance = get_object_or_404(TaskOffer, id=request.POST.get('taskofferid'))
             offer_response_form = TaskOfferResponseForm(request.POST, instance=instance)
@@ -92,13 +107,19 @@ def project_view(request, project_id):
                 project.status = project_status.status
                 project.save()
         status_form = ProjectStatusForm(initial={'status': project.status})
-
+        print("Customer can review")
+        print(participants_reviewable)
+        print("IST CUSTOMER?" + str(is_customer))
+        print(review_available)
         return render(request, 'projects/project_view.html', {
         'project': project,
         'tasks': tasks,
         'status_form': status_form,
         'total_budget': total_budget,
         'offer_response_form': offer_response_form,
+        "review_available": review_available,
+        "is_customer": is_customer,
+        "parctipants_reviewable": participants_reviewable,
         })
 
 
@@ -111,12 +132,13 @@ def project_view(request, project_id):
                 task_offer.offerer = request.user.profile
                 task_offer.save()
         task_offer_form = TaskOfferForm()
-
         return render(request, 'projects/project_view.html', {
         'project': project,
         'tasks': tasks,
         'task_offer_form': task_offer_form,
         'total_budget': total_budget,
+        'review_available': review_available,
+        "is_customer": is_customer,
         })
 
 
