@@ -141,12 +141,12 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, 'beelance/staticfiles')
 # MUST be removed when we deploy it to HEROK
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_HOST_USER = 'glanceDJ@gmail.com'
-#EMAIL_HOST_PASSWORD = 'mtdttdt4242'
-#EMAIL_USE_TLS = True
-#EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'glanceDJ@gmail.com'
+EMAIL_HOST_PASSWORD = 'mtdttdt4242'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
 
 TEST = 'test' in sys.argv
 is_prod = os.environ.get('IS_HEROKU', None)
@@ -170,8 +170,10 @@ if is_prod:
     EMAIL_USE_TLS = True
     EMAIL_PORT = 587
 
-    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None)
+    EMAIL_HOST_USER = 'glanceDJ@gmail.com'
     EMAIL_HOST_PASSWORD = 'mtdttdt4242'
-    #EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', "mtdttdt4242")
+
+    #EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None)
+    #EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', "None")
 
     django_heroku.settings(locals())
