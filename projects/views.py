@@ -73,6 +73,9 @@ def project_view(request, project_id):
     project = Project.objects.get(pk=project_id)
     tasks = project.tasks.all()
     total_budget = 0
+    available_p_slots = PromotionSettings.objects.get(pk=1).pool_size - (PromotionSettings.objects.count()-1)
+
+
 
     for item in tasks:
         total_budget += item.budget
@@ -109,6 +112,8 @@ def project_view(request, project_id):
         'status_form': status_form,
         'total_budget': total_budget,
         'offer_response_form': offer_response_form,
+        'request': request,
+        'available_p_slots': available_p_slots,
         })
 
 
