@@ -33,6 +33,7 @@
       <br>
     {% elif project.has_requested_promotion == True %}
       <p>Promotion request: Pending</p>
+      <a class="btn btn-primary" role="button" href="{% url 'promotion_payment' project.id%}">Pay</a>
   {% endif %}
 
 

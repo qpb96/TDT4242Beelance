@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect
 from projects.models import Project, Task, TaskOffer
 from projects.templatetags.project_extras import get_accepted_task_offer
 from .forms import PaymentForm
-from .models import Payment
+from .models import Payment, PromotionPayment
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 
@@ -43,3 +44,20 @@ def receipt(request, project_id, task_id):
                 'task': task,
                 'taskoffer': taskoffer,
                  })
+
+@login_required
+def promotion_payment(request, project_id ):
+    sender = request.user
+
+    if request.method == 'POST':
+        payment = PromotionPayment(payer=sender)
+        payment.save()
+        messages.success(request, "Payment successful")
+        return redirect('project_view', project_id=project_id,)
+
+    form = PaymentForm()
+
+    return render(request,
+                'payment/payment.html', {
+                'form': form,
+                })

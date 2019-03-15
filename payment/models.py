@@ -12,3 +12,11 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.payer.user.username + " " + self.receiver.user.username + " " + str(self.task.budget)
+
+
+class PromotionPayment(models.Model):
+    payer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    fee = models.FloatField(default=0)
+
+    def __str__(self):
+        return self.payer.user.username
