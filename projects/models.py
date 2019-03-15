@@ -7,7 +7,8 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 import os
 
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.utils import timezone
 
 class OverwriteStorage(FileSystemStorage):
 
@@ -70,17 +71,17 @@ class PromotionSettings(SingletonModel):
     duration_in_days = models.IntegerField(default=7)
 
     def __str__(self):
-        return "Promotion Settings"
+        return "Promotion Setting"
 
     def clean(self):
         validation_errors = []
         if self.pool_size < self.display_amount:
             validation_errors.append(ValidationError("Pool size cannot be smaller than Display amount"))
-        if self.isNegative(self.pool_size):
+        if self.is_negative(self.pool_size):
             validation_errors.append(ValidationError("Pool size cannot be negative."))
-        if self.isNegative(self.display_amount):
+        if self.is_negative(self.display_amount):
             validation_errors.append(ValidationError("Display amount cannot be negative."))
-        if self.isNegative(self.promotion_fee):
+        if self.is_negative(self.promotion_fee):
             validation_errors.append(ValidationError("Promotion fee cannot be negative."))
         if self.duration_in_days < 1:
             validation_errors.append(ValidationError("Duration in days must have a valid duration length."))
@@ -88,22 +89,48 @@ class PromotionSettings(SingletonModel):
         if len(validation_errors) > 0:
             raise ValidationError(validation_errors)
 
-    def isNegative(self, number):
+    def is_negative(self, number):
         return number < 0
 
 class PromotedProject(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="promoted_projects")
-    start = models.DateTimeField(auto_now_add=True, blank=True)
-
-    def end(self):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="promoted_project")
+    start = models.DateTimeField(default=timezone.now, blank=True)
+    def get_default_end_date():
         promotion_settings = PromotionSettings.load()
-        if self.start is not None:
-            return self.start + timedelta(days=promotion_settings.duration_in_days)
-        else:
-            return "-"
+        return timezone.now() + timedelta(days=promotion_settings.duration_in_days)
+    end = models.DateTimeField(default=get_default_end_date, blank=True)
+
             
     def __str__(self):
-        return str(self.project.id) + " " + self.project.title
+        return self.project.title
+
+    def clean(self):
+        for active_promotion in ActivePromotion.objects.all():
+            if active_promotion.promoted_project.project == self.project:
+                raise ValidationError("The project is already in an active promotion!")
+
+class ActivePromotion(models.Model):
+    promoted_project = models.ForeignKey(PromotedProject, on_delete=models.CASCADE, related_name="active_promotion")
+    
+    def category(self):
+        return self.promoted_project.project.category
+
+    def count_promotions_in_category(self, category):
+        return ActivePromotion.objects.all().filter(promoted_project__project__category=category).count()
+
+    def clean(self):
+        settings = PromotionSettings.load()
+        if self.count_promotions_in_category(self.category()) >= settings.pool_size:
+            raise ValidationError("The promotion pool for this category is full!")
+        if self.promoted_project.end < timezone.now():
+            raise ValidationError("The promotion has already expired")
+        try:
+            ActivePromotion.objects.get(promoted_project=self.promoted_project)
+            is_promoted = True
+        except:
+            is_promoted = False    
+        if is_promoted:
+            raise ValidationError("The project is already promoted!")
 
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")
