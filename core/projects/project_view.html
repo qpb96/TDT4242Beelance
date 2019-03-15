@@ -15,6 +15,21 @@
   <p>Project total budget: {{total_budget}}</p>
   <h3>Description</h3>
   <p class="project-description">{{ project.description }}</p>
+  {% if request.user.profile == project.user %}
+     <h3>Available promotion slots</h3>
+      <p>{{ available_p_slots }}</p>
+      {% if requested_promotion == False and available_p_slots > 0 %}
+             <a target="_blank"
+                 class="btn btn-info pull-right"
+                 href="{% url 'promotion_request' project.id %}">
+                 Request promtion slot
+    |         </a>
+          {% else %}
+          <p>Promotion request: Pending</p>
+      {% endif %}
+
+
+  {% endif %}
   <h4>Category: {{project.category}}</h4>
 
 

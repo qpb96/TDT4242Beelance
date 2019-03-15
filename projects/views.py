@@ -1,10 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Project, PromotionSettings, PromotedProject, Task, TaskFile, TaskOffer, Delivery, ProjectCategory, Team, TaskFileTeam, directory_path
-from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, TaskOfferResponseForm, TaskPermissionForm, DeliveryForm, TaskDeliveryResponseForm, TeamForm, TeamAddForm
+from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, TaskOfferResponseForm, TaskPermissionForm, DeliveryForm, TaskDeliveryResponseForm, TeamForm, TeamAddForm, PromotionRequestForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from user.models import Profile
+from django.contrib import messages
 
 def projects(request):
     promotion_settings = PromotionSettings.load()
@@ -73,6 +74,9 @@ def project_view(request, project_id):
     project = Project.objects.get(pk=project_id)
     tasks = project.tasks.all()
     total_budget = 0
+    available_p_slots = PromotionSettings.objects.get(pk=1).pool_size - (PromotionSettings.objects.count()-1)
+
+
 
     for item in tasks:
         total_budget += item.budget
@@ -109,6 +113,9 @@ def project_view(request, project_id):
         'status_form': status_form,
         'total_budget': total_budget,
         'offer_response_form': offer_response_form,
+        'request': request,
+        'available_p_slots': available_p_slots,
+        'requested_promotion': Project.objects.get(pk=project.id).requested_promotion
         })
 
 
@@ -379,3 +386,20 @@ def delete_file(request, file_id):
     f = TaskFile.objects.get(pk=file_id)
     f.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def promotion_request(request, project_id):
+    project =Project.objects.get(pk=project_id)
+    form = PromotionRequestForm(request, instance=project)
+    if form.is_valid():
+        p = form.save(commit=False)
+        p.requested_promotion = True
+        p.save()
+        print(project)
+        print(project.promoted_projects)
+        messages.success(request, "Promotion request sent")
+        return redirect('project_view', project_id)
+    else:
+        print("Det ble fucka")
+        messages.error(request, "Something went wrong")
+

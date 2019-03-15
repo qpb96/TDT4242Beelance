@@ -82,3 +82,9 @@ class TeamAddForm(forms.ModelForm):
     class Meta:
         model = Team
         fields = ('members', )
+
+
+class PromotionRequestForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = {'requested_promotion'}

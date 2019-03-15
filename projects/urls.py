@@ -9,4 +9,5 @@ urlpatterns = [
     path('<project_id>/tasks/<task_id>/upload/', views.upload_file_to_task, name='upload_file_to_task'),
     path('<project_id>/tasks/<task_id>/permissions/', views.task_permissions, name='task_permissions'),
     path('delete_file/<file_id>', views.delete_file, name='delete_file'),
+    path('<project_id>/"promotion_req_sent"', views.promotion_request, name='promotion_request'),
 ]
