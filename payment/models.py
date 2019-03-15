@@ -12,3 +12,13 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.payer.user.username + " " + self.receiver.user.username + " " + str(self.task.budget)
+
+
+class PromotionPayment(models.Model):
+    payer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+#    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="receiver")
+#    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return self.payer.user.username
