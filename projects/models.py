@@ -49,7 +49,7 @@ class Project(models.Model):
     description = models.TextField(max_length=500)
     participants = models.ManyToManyField(Profile, related_name='project_participants')
     category = models.ForeignKey(ProjectCategory, on_delete=models.CASCADE, related_name='project_category')
-    requested_promotion = models.BooleanField(default=False)
+    has_requested_promotion = models.BooleanField(default=False)
 
     OPEN = 'o'
     INPROG = 'i'
@@ -116,12 +116,12 @@ class ActivePromotion(models.Model):
     def category(self):
         return self.promoted_project.project.category
 
-    def count_promotions_in_category(self, category):
+    def count_promotions_in_category(category):
         return ActivePromotion.objects.all().filter(promoted_project__project__category=category).count()
 
     def clean(self):
         settings = PromotionSettings.load()
-        if self.count_promotions_in_category(self.category()) >= settings.pool_size:
+        if ActivePromotion.count_promotions_in_category(self.category()) >= settings.pool_size:
             raise ValidationError("The promotion pool for this category is full!")
         if self.promoted_project.end < timezone.now():
             raise ValidationError("The promotion has already expired")

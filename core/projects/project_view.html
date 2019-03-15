@@ -15,23 +15,29 @@
   <p>Project total budget: {{total_budget}}</p>
   <h3>Description</h3>
   <p class="project-description">{{ project.description }}</p>
-  {% if request.user.profile == project.user %}
-     <h3>Available promotion slots</h3>
-      <p>{{ available_p_slots }}</p>
-      {% if requested_promotion == False and available_p_slots > 0 %}
-             <a target="_blank"
-                 class="btn btn-info pull-right"
-                 href="{% url 'promotion_request' project.id %}">
-                 Request promtion slot
-    |         </a>
-          {% else %}
-          <p>Promotion request: Pending</p>
-      {% endif %}
+  {% if user == project.user.user %}
+    <h3>Promote Project</h3>
+    {% if project.has_requested_promotion == False and available_p_slots > 0 %}
+      <p>
+        There are {{ available_p_slots }} available promotion slots.
+        Do you want to promote your project for extra visibility?
+      </p>
+      <p><b>Fee:</b> {{ promotion_settings.promotion_fee }}</p>
+      <p><b>Duration:</b> {{ promotion_settings.duration_in_days }} days</p>
+      <a  target="_blank"
+          class="btn btn-info"
+          href="{% url 'promotion_request' project.id %}">
+          Request promtion slot
+      </a>
+      <br>
+      <br>
+    {% elif project.has_requested_promotion == True %}
+      <p>Promotion request: Pending</p>
+  {% endif %}
 
 
   {% endif %}
   <h4>Category: {{project.category}}</h4>
-
 
     {% if user.is_authenticated %}
       {% if user == project.user.user %}
