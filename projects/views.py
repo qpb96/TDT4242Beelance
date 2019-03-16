@@ -14,7 +14,7 @@ def projects(request):
 
     promoted_projects = []
     for category in project_categories:
-        selection = PromotedProject.objects.all().filter(project__category=category)
+        selection = ActivePromotion.objects.all().filter(project__category=category)
         selection = selection.order_by('?')[0:promotion_settings.display_amount]
         promoted_projects.extend(selection)
 
