@@ -104,11 +104,6 @@ class PromotedProject(models.Model):
     def __str__(self):
         return self.project.title
 
-    def clean(self):
-        for active_promotion in ActivePromotion.objects.all():
-            if active_promotion.promoted_project.project == self.project:
-                raise ValidationError("The project is already in an active promotion!")
-
 class ActivePromotion(models.Model):
     promoted_project = models.OneToOneField(PromotedProject, on_delete=models.CASCADE, primary_key=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="project")
@@ -118,6 +113,9 @@ class ActivePromotion(models.Model):
 
     def count_promotions_in_category(category):
         return ActivePromotion.objects.all().filter(project__category=category).count()
+
+    def is_expired(self):
+        return self.promoted_project.end < timezone.now()
 
     def clean(self):
         settings = PromotionSettings.load()
