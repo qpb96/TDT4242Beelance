@@ -200,7 +200,7 @@ def upload_file_to_task(request, project_id, task_id):
 
 def get_user_task_permissions(user, task):
 
-    if user == task.project.user.user:
+    if user == task.project.user:
         return {
             'write': True,
             'read': True,
@@ -208,7 +208,7 @@ def get_user_task_permissions(user, task):
             'owner': True,
             'upload': True,
         }
-    if task.accepted_task_offer() and task.accepted_task_offer().offerer == user.profile:
+    if task.accepted_task_offer() and task.accepted_task_offer().offerer == user:
         return {
             'write': True,
             'read': True,
@@ -224,14 +224,14 @@ def get_user_task_permissions(user, task):
         'view_task': False,
         'upload': False,
     }
-    user_permissions['read'] = user_permissions['read'] or user.profile.task_participants_read.filter(id=task.id).exists()
+    user_permissions['read'] = user_permissions['read'] or user.task_participants_read.filter(id=task.id).exists()
 
     # Team members can view its teams tasks
-    user_permissions['upload'] = user_permissions['upload'] or user.profile.teams.filter(task__id=task.id, write=True).exists()
-    user_permissions['view_task'] = user_permissions['view_task'] or user.profile.teams.filter(task__id=task.id).exists()
+    user_permissions['upload'] = user_permissions['upload'] or user.teams.filter(task__id=task.id, write=True).exists()
+    user_permissions['view_task'] = user_permissions['view_task'] or user.teams.filter(task__id=task.id).exists()
 
-    user_permissions['write'] = user_permissions['write'] or user.profile.task_participants_write.filter(id=task.id).exists()
-    user_permissions['modify'] = user_permissions['modify'] or user.profile.task_participants_modify.filter(id=task.id).exists()
+    user_permissions['write'] = user_permissions['write'] or user.task_participants_write.filter(id=task.id).exists()
+    user_permissions['modify'] = user_permissions['modify'] or user.task_participants_modify.filter(id=task.id).exists()
 
     return user_permissions
 
