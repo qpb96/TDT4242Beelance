@@ -111,13 +111,14 @@ class PromotedProject(models.Model):
                 raise ValidationError("The project is already in an active promotion!")
 
 class ActivePromotion(models.Model):
-    promoted_project = models.ForeignKey(PromotedProject, on_delete=models.CASCADE, related_name="active_promotion")
-    
+    promoted_project = models.OneToOneField(PromotedProject, on_delete=models.CASCADE, primary_key=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="project")
+
     def category(self):
-        return self.promoted_project.project.category
+        return self.project.category
 
     def count_promotions_in_category(category):
-        return ActivePromotion.objects.all().filter(promoted_project__project__category=category).count()
+        return ActivePromotion.objects.all().filter(project__category=category).count()
 
     def clean(self):
         settings = PromotionSettings.load()
@@ -125,6 +126,9 @@ class ActivePromotion(models.Model):
             raise ValidationError("The promotion pool for this category is full!")
         if self.promoted_project.end < timezone.now():
             raise ValidationError("The promotion has already expired")
+        if self.promoted_project.project != self.project:
+            raise ValidationError("The project found is not the same as the promoted one!")
+
         try:
             ActivePromotion.objects.get(promoted_project=self.promoted_project)
             is_promoted = True

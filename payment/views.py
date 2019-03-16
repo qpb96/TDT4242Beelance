@@ -59,7 +59,7 @@ def promotion_payment(request, project_id ):
             project = Project.objects.get(pk=project_id)
             promoted_project = PromotedProject(project=project)
             promoted_project = validate_then_save(promoted_project)
-            active_promotion = ActivePromotion(promoted_project=promoted_project)
+            active_promotion = ActivePromotion(promoted_project=promoted_project, project=project)
             active_promotion = validate_then_save(active_promotion)
             payment = PromotionPayment(payer=sender)
             payment.save()
