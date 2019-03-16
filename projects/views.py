@@ -100,10 +100,7 @@ def project_view(request, project_id):
     if request.user == project.user.user:
         tasks = review.get_tasks(project_id)
         for task in tasks:
-            print("lool")
-            print(task)
             t = Task.objects.get(title=task.title)
-            print(t)
             if review.task_delivered_or_declined(project_id, t.title):
                 participants = review.participants_reviewable(project_id, t.title)
                 for p in participants:
@@ -131,10 +128,6 @@ def project_view(request, project_id):
                 project.status = project_status.status
                 project.save()
         status_form = ProjectStatusForm(initial={'status': project.status})
-        print("Customer can review")
-        print(participants_reviewable)
-        print("IST CUSTOMER?" + str(is_customer))
-        print(review_available)
         return render(request, 'projects/project_view.html', {
             'project': project,
             'tasks': tasks,
