@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, redirect
 
-from projects.models import Project, Task, TaskOffer
+from projects.models import Project, Task, TaskOffer, PromotedProject, ActivePromotion
 from projects.templatetags.project_extras import get_accepted_task_offer
 from .forms import PaymentForm
 from .models import Payment, PromotionPayment
@@ -47,13 +47,26 @@ def receipt(request, project_id, task_id):
 
 @login_required
 def promotion_payment(request, project_id ):
-    sender = request.user
+    sender = request.user.profile
+
+    def validate_then_save(model):
+        model.clean()
+        model.save()
+        return model
 
     if request.method == 'POST':
-        payment = PromotionPayment(payer=sender)
-        payment.save()
-        messages.success(request, "Payment successful")
-        return redirect('project_view', project_id=project_id,)
+        try:
+            project = Project.objects.get(pk=project_id)
+            promoted_project = PromotedProject(project=project)
+            promoted_project = validate_then_save(promoted_project)
+            active_promotion = ActivePromotion(promoted_project=promoted_project)
+            active_promotion = validate_then_save(active_promotion)
+            payment = PromotionPayment(payer=sender)
+            payment.save()
+            messages.success(request, "Payment successful")
+            return redirect('project_view', project_id=project_id,)
+        except:
+            messages.error(request, "Something wrong happend during the transaction.")
 
     form = PaymentForm()
 
