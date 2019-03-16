@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Project, PromotionSettings, PromotedProject, ActivePromotion,Task, TaskFile, TaskOffer, Delivery, ProjectCategory, Team, TaskFileTeam, directory_path
-from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, TaskOfferResponseForm, TaskPermissionForm, DeliveryForm, TaskDeliveryResponseForm, TeamForm, TeamAddForm, PromotionRequestForm
+from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, TaskOfferResponseForm, TaskPermissionForm, DeliveryForm, TaskDeliveryResponseForm, TeamForm, TeamAddForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from user.models import Profile
@@ -76,7 +76,17 @@ def project_view(request, project_id):
     total_budget = 0
     promotion_settings = PromotionSettings.load()
     available_p_slots = promotion_settings.pool_size - ActivePromotion.count_promotions_in_category(project.category)
-
+    promoted_projects = PromotedProject.objects.all().filter(project=project)
+    is_project_promoted = False
+    promoted_project = False
+    for promoted_project in promoted_projects:
+        try:
+            active_promotion = ActivePromotion.objects.get(project=project)
+            is_project_promoted = True
+            promoted_project = active_promotion.promoted_project
+        except:
+            pass
+            
     for item in tasks:
         total_budget += item.budget
 
@@ -113,7 +123,9 @@ def project_view(request, project_id):
             'total_budget': total_budget,
             'offer_response_form': offer_response_form,
             'available_p_slots': available_p_slots,
-            'promotion_settings': promotion_settings
+            'promotion_settings': promotion_settings,
+            'is_project_promoted': is_project_promoted,
+            'promoted_project': promoted_project,
         })
 
 
@@ -384,17 +396,3 @@ def delete_file(request, file_id):
     f = TaskFile.objects.get(pk=file_id)
     f.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-@login_required
-def promotion_request(request, project_id):
-    project =Project.objects.get(pk=project_id)
-    form = PromotionRequestForm(request, instance=project)
-    if form.is_valid():
-        p = form.save(commit=False)
-        p.has_requested_promotion = True
-        p.save()
-        messages.success(request, "Promotion request sent")
-        return redirect('project_view', project_id)
-    else:
-        messages.error(request, "Something went wrong")
-
