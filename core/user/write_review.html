@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% load icons %}
+{% load project_extras %}
+{% load home_extras %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Profile{% endblock %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" value="submit">Post</button>
+</form>
+{% endblock %}

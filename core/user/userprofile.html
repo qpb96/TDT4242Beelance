@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% load icons %}
+{% load project_extras %}
+{% load home_extras %}
+
+{% block title %}{{ user_username }}{% endblock %}
+<
+{% block content %}
+
+<div class="row">
+<div class="col">
+  <h5 class="mt-5">{{ user_username }}'s profile <img class="ml-1 honey" src="{% static 'img/honeybee.png' %}" alt="Image of a honeybee."/></h5>
+</div>
+</div>
+
+<div class="h-100">
+  <div class="row mt-1">
+    {% if display_full_name %}
+    <h5 class="ml-3 font-weight-bold">Full Name:</h5>
+    <h5 class="ml-2"> {{user_first_name}} {{user_last_name}}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_email %}
+    <h5 class="ml-3 font-weight-bold">Email:</h5>
+    <h5 class="ml-2"> {{ user_email }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_comapny %}
+    <h5 class="ml-3 font-weight-bold">Company:</h5>
+    <h5 class="ml-2"> {{ user_company }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_phone %}
+    <h5 class="ml-3 font-weight-bold">Phone:</h5>
+    <h5 class="ml-2"> {{ user_phone }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_street %}
+    <h5 class="ml-3 font-weight-bold">Address:</h5>
+    <h5 class="ml-2"> {{ user_address }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_city %}
+    <h5 class="ml-3 font-weight-bold">City:</h5>
+    <h5 class="ml-2"> {{ user_city }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_state %}
+    <h5 class="ml-3 font-weight-bold">State:</h5>
+    <h5 class="ml-2"> {{ user_state }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_postal %}
+    <h5 class="ml-3 font-weight-bold">Postal Code:</h5>
+    <h5 class="ml-2"> {{ user_postal_code }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    {% if display_country %}
+    <h5 class="ml-3 font-weight-bold">Country:</h5>
+    <h5 class="ml-2"> {{ user_country }}</h5>
+    {% endif %}
+  </div>
+  <div class="row mt-1">
+    <h5 class="ml-3 font-weight-bold">Reviews:</h5>
+  </div>
+  <div>
+      {% for review in reviews %}
+
+      <p>Project: {{ review.project }}</p>
+      <p>author:  <a href="{% url 'view_user_profile' review.author%}">{{review.author}}</a></p>
+      <h5>{{review.title}}</h5>
+      <p>{{ review.body }}</p>
+      <p>{{ review.date }}</p>
+
+      <br>
+      <br>
+      {% endfor %}
+
+  </div>
+
+</div>
+{% endblock %}

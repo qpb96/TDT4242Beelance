@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% load icons %}
+{% load project_extras %}
+{% load home_extras %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<h2 class="mt-4" >Edit Profile</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <!-- User Form -->
+    <div class="row mt-3">
+      <h5 class="ml-3">First Name:</h5>
+      <h5 style="margin-left:183px">Last Name:</h5>
+    </div>
+    <div class="row">
+      <h5 class="ml-3"> {{ user_form.first_name}} </h5> 
+      <h5 class="ml-3"> {{ user_form.last_name}} </h5> 
+      <h5 class="ml-3"> {{ profile_form.display_full_name}} </h5> 
+      <h5 class="ml-2">Display full name</h5>
+    </div>
+
+    <div class="row mt-3">
+      <h5 class="ml-3">Email:</h5>
+    </div>
+    <div class="row">
+      <h5 class="ml-3 input-xxlarge"> {{ user_form.email}} </h5> 
+      <h5 class="ml-2"> {{ profile_form.display_company}} </h5> 
+      <h5 class="ml-2">Display email</h5>
+    </div>      
+
+    <!-- Profile Form -->
+    <div class="row mt-3">
+      <h5 class="ml-3">Company:</h5>
+    </div>
+    <div class="row">
+      <h5 class="ml-3 input-xxlarge"> {{ profile_form.company}} </h5> 
+      <h5 class="ml-2"> {{ profile_form.display_company}} </h5> 
+      <h5 class="ml-2">Display company</h5>
+    </div>
+
+    <div class="row mt-3">
+      <h5 class="ml-3">Phone:</h5>
+    </div>
+    <div class="row">
+      <h5 class="ml-3"> {{ profile_form.phone_number}} </h5> 
+      <h5 class="ml-2"> {{ profile_form.display_phone}} </h5> 
+      <h5 class="ml-2">Display phone number</h5>
+    </div>
+
+      <div class="row mt-3">
+        <h5 class="ml-3">Address:</h5>
+      </div>
+      <div class="row">
+        <h5 class="ml-3 input-xxlarge"> {{ profile_form.street_address}} </h5> 
+        <h5 class="ml-2"> {{ profile_form.display_street}} </h5> 
+        <h5 class="ml-2">Display address</h5>
+      </div>
+
+      <div class="row mt-3">
+        <h5 class="ml-3">City:</h5>
+      </div>
+      <div class="row">
+        <h5 class="ml-3 input-xxlarge"> {{ profile_form.city}} </h5> 
+        <h5 class="ml-2"> {{ profile_form.display_city}} </h5> 
+        <h5 class="ml-2">Display city</h5>
+      </div>
+
+      <div class="row mt-3">
+        <h5 class="ml-3">State:</h5>
+      </div>
+      <div class="row">
+        <h5 class="ml-3 input-xxlarge"> {{ profile_form.state}} </h5> 
+        <h5 class="ml-2"> {{ profile_form.display_state}} </h5> 
+        <h5 class="ml-2">Display state</h5>
+      </div>
+
+
+      <div class="row mt-3">
+        <h5 class="ml-3">Postal Code:</h5>
+      </div>
+      <div class="row">
+        <h5 class="ml-3 input-xxlarge"> {{ profile_form.postal_code}} </h5> 
+        <h5 class="ml-2"> {{ profile_form.display_postal}} </h5> 
+        <h5 class="ml-2">Display postal code</h5>
+      </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Update</button>
+  </form>
+{% endblock %}

@@ -9,7 +9,16 @@
 
 
 {% block content %}
+    {% if review_available and is_customer %}
+        {% for participant in parctipants_reviewable %}
+        <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  username=participant.user.username project_id=project.id%}">Write a review of {{ participant.user.username  }}</a>
+        {% endfor %}
+    {% endif %}
+        {% if review_available and is_customer == False %}
+        <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  username=project.user.user.username project_id=project.id%}">Write a review of the customer</a>
+    {% endif %}
   <h3 class="my-3">{{ project.title }}</h3>
+  <p>Posted by: <a href="{% url 'view_user_profile' project.user.user.username%}">{{project.user.user.username}}</a></p>
   <p>Project status: {{project.get_status_display}}</p>
 
   <p>Project total budget: {{total_budget}}</p>
@@ -97,7 +106,7 @@
 
         {% for task_offer in task_offers %}
         {% if not task_offer.status == 'd' %}
-        <li class="list-group-item d-flex justify-content-between align-items-center"> Offer from {{task_offer.offerer.user.username}}
+        <a class="nav-link font-weight-light"  href="{% url 'view_user_profile' task_offer.offerer.user.username%}">Offer from: {{task_offer.offerer.user.username}}</a>
           <p>Status: {{task_offer.get_status_display}}</p>
           <div>
             <button class="btn btn-primary" data-toggle="modal" data-target="#seeOfferModal{{task_offer.id}}">View Offer</button>
@@ -144,7 +153,7 @@
 
         {% else %}
 
-        <p>Project participants: {{ project|get_project_participants_string}}</p>
+        <p>Project participants: <a href="{% url 'view_user_profile' project|get_project_participants_string %}"> {{project|get_project_participants_string}} </a></p>
 
           <h3 class="mb-3 mt-5">List of Tasks</h3>
           <div class="list-group">
@@ -308,4 +317,5 @@
       {% endif %}
 
     {%endif%}
+
 {% endblock %}
