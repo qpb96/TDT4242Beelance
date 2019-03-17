@@ -9,23 +9,41 @@
 
 
 {% block content %}
-    {% if review_available and is_customer %}
-        {% for participant in parctipants_reviewable %}
-        <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  username=participant.user.username project_id=project.id%}">Write a review of {{ participant.user.username  }}</a>
-        {% endfor %}
-    {% endif %}
-        {% if review_available and is_customer == False %}
-        <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  username=project.user.user.username project_id=project.id%}">Write a review of the customer</a>
-    {% endif %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/projects.css' %}">
+  {% if review_available and is_customer %}
+    {% for participant in parctipants_reviewable %}
+      <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  username=participant.user.username project_id=project.id%}">Write a review of {{ participant.user.username  }}</a>
+    {% endfor %}
+  {% endif %}
+  {% if review_available and is_customer == False %}
+    <a class="btn btn-primary mr-auto" role="button" href="{% url 'createReview'  username=project.user.user.username project_id=project.id%}">Write a review of the customer</a>
+  {% endif %}
   <h3 class="my-3">{{ project.title }}</h3>
+  {% if user == project.user.user %}
+    <div class="promotion-container">
+      <h4>PROMOTION</h4>
+      {% if is_project_promoted %}
+        <p>Hurray! Your project is promoted until {{ promoted_project.end }}</p>
+      {% elif available_p_slots > 0 %}
+        <p>
+          There are available promotion slots.
+          Do you want to boost your project's visibility?
+        </p>
+        <p><b>Fee:</b> {{ promotion_settings.promotion_fee }}</p>
+        <p><b>Duration:</b> {{ promotion_settings.duration_in_days }} days</p>
+        <a class="btn btn-primary" role="button" href="{% url 'promotion_payment' project.id%}">Pay</a>
+      {% endif %}
+    </div>
+  {% endif %}
   <p>Posted by: <a href="{% url 'view_user_profile' project.user.user.username%}">{{project.user.user.username}}</a></p>
   <p>Project status: {{project.get_status_display}}</p>
 
   <p>Project total budget: {{total_budget}}</p>
   <h3>Description</h3>
   <p class="project-description">{{ project.description }}</p>
-  <h4>Category: {{project.category}}</h4>
 
+
+  <h4>Category: {{project.category}}</h4>
 
     {% if user.is_authenticated %}
       {% if user == project.user.user %}

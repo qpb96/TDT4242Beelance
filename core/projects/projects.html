@@ -7,6 +7,7 @@
 {% block title %}Projects{% endblock %}
 
 {% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/projects.css' %}">
   <h2 class="mt-3 text-center" >Open Projects</h2>
 
 
@@ -34,25 +35,45 @@
 
       <div class="tab-content"  id="nav-tabContent">
         {% for project_category in project_categories %}
-          <div class="tab-pane fade show" id="{{project_category}}" role="tabpanel" aria-labelledby="category-{{project_category}}">
-            <h3 class="mb-3 mt-5">{{project_category}}</h3>
-            <div class="row projects-view">
-                {% for project in projects %}
-                  {% if project.status == project.OPEN and project.category.id == project_category.id %}
-                  <a class="open-project-view-item" href="{% url 'project_view' project_id=project.id%}">
+        
+        <div class="tab-pane fade show" id="{{project_category}}" role="tabpanel" aria-labelledby="category-{{project_category}}">
+          <h3 class="mb-3 mt-5">{{project_category}}</h3>
+          <div class="row projects-view">
+            
+            {% for promoted_project in promoted_projects %}
+              {% if promoted_project.project.category.id == project_category.id %}
+                <a class="open-project-view-item" href="{% url 'project_view' project_id=promoted_project.project.id%}">
                   <div class="col-md mb-3 ml-3 mr-3 mt-3 project-box-style">
+                    <div class="project-promotion-ribbon ribbon-top-left"><span>PROMOTED</span></div>
                     <div class="media">
                       <img class="align-self-top mr-3 mt-5 project-image" src="{% static 'img/idea.jpg' %}" alt="Generic placeholder image." />
                       <div class="media-body">
-                        <h5 class="mt-3"> {% icon 'tasks' %} {{project.title}}</h5>
-                        <p>Posted by: <a href="{% url 'view_user_profile' project.user.user.username %}">{{project.user.user.username}}</a></p>
-                        <p class="project-description">{{project.description}}</p>
+                        <h5 class="mt-3"> {% icon 'tasks' %} {{ promoted_project.project.title}}</h5>
+                        <p>Posted by: {{ promoted_project.project.user.user.username}}</p>
+                        <p class="project-description">{{ promoted_project.project.description}}</p>
+                      </div>
                     </div>
                   </div>
+                </a>
+              {% endif %}
+            {% endfor %}
+            
+            {% for project in projects %}
+              {% if project.status == project.OPEN and project.category.id == project_category.id %}
+              <a class="open-project-view-item" href="{% url 'project_view' project_id=project.id%}">
+                <div class="col-md mb-3 ml-3 mr-3 mt-3 project-box-style">
+                  <div class="media">
+                    <img class="align-self-top mr-3 mt-5 project-image" src="{% static 'img/idea.jpg' %}" alt="Generic placeholder image." />
+                    <div class="media-body">
+                      <h5 class="mt-3"> {% icon 'tasks' %} {{project.title}}</h5>
+                      <p>Posted by: <a href="{% url 'view_user_profile' project.user.user.username %}">{{project.user.user.username}}</a></p>
+                      <p class="project-description">{{project.description}}</p>
                   </div>
-                  </a>
-                  {% endif %}
-                {% endfor %}
+                </div>
+                </div>
+              </a>
+              {% endif %}
+            {% endfor %}
 
             </div>
 
@@ -62,7 +83,7 @@
 
     </div>
   </div>
-
+ 
   <script src="{% static 'js/tab_change.js' %}"></script>
   <script>
   document.getElementsByClassName('list-group-item-action')[0].click();

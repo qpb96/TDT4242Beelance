@@ -1,19 +1,30 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Project, Task, TaskFile, TaskOffer, Delivery, ProjectCategory, Team, TaskFileTeam, directory_path
+from .models import Project, PromotionSettings, PromotedProject, ActivePromotion,Task, TaskFile, TaskOffer, Delivery, ProjectCategory, Team, TaskFileTeam, directory_path
 from .forms import ProjectForm, TaskFileForm, ProjectStatusForm, TaskOfferForm, TaskOfferResponseForm, TaskPermissionForm, DeliveryForm, TaskDeliveryResponseForm, TeamForm, TeamAddForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from user.models import Profile
+from django.contrib import messages
 from . import review
 
 def projects(request):
-    projects = Project.objects.all()
+    promotion_settings = PromotionSettings.load()
     project_categories = ProjectCategory.objects.all()
+
+    promoted_projects = []
+    for category in project_categories:
+        selection = ActivePromotion.objects.all().filter(project__category=category)
+        selection = selection.order_by('?')[0:promotion_settings.display_amount]
+        promoted_projects.extend(selection)
+
+    projects = Project.objects.all().exclude(id__in=[p.project.id for p in promoted_projects])
+    
     return render(request,
         'projects/projects.html',
         {
             'projects': projects,
+            'promoted_projects': promoted_projects,
             'project_categories': project_categories,
         }
     )
@@ -64,6 +75,19 @@ def project_view(request, project_id):
     project = Project.objects.get(pk=project_id)
     tasks = project.tasks.all()
     total_budget = 0
+    promotion_settings = PromotionSettings.load()
+    available_p_slots = promotion_settings.pool_size - ActivePromotion.count_promotions_in_category(project.category)
+    promoted_projects = PromotedProject.objects.all().filter(project=project)
+    is_project_promoted = False
+    promoted_project = False
+    for promoted_project in promoted_projects:
+        try:
+            active_promotion = ActivePromotion.objects.get(project=project)
+            is_project_promoted = True
+            promoted_project = active_promotion.promoted_project
+        except:
+            pass
+            
 
     review_available = review.review_possible(request, project_id)
     is_customer = review.is_customer(request, project_id)
@@ -76,10 +100,7 @@ def project_view(request, project_id):
     if request.user == project.user.user:
         tasks = review.get_tasks(project_id)
         for task in tasks:
-            print("lool")
-            print(task)
             t = Task.objects.get(title=task.title)
-            print(t)
             if review.task_delivered_or_declined(project_id, t.title):
                 participants = review.participants_reviewable(project_id, t.title)
                 for p in participants:
@@ -107,19 +128,19 @@ def project_view(request, project_id):
                 project.status = project_status.status
                 project.save()
         status_form = ProjectStatusForm(initial={'status': project.status})
-        print("Customer can review")
-        print(participants_reviewable)
-        print("IST CUSTOMER?" + str(is_customer))
-        print(review_available)
         return render(request, 'projects/project_view.html', {
-        'project': project,
-        'tasks': tasks,
-        'status_form': status_form,
-        'total_budget': total_budget,
-        'offer_response_form': offer_response_form,
-        "review_available": review_available,
-        "is_customer": is_customer,
-        "parctipants_reviewable": participants_reviewable,
+            'project': project,
+            'tasks': tasks,
+            'status_form': status_form,
+            'total_budget': total_budget,
+            'offer_response_form': offer_response_form,
+            'available_p_slots': available_p_slots,
+            'promotion_settings': promotion_settings,
+            'is_project_promoted': is_project_promoted,
+            'promoted_project': promoted_project,
+            "review_available": review_available,
+            "is_customer": is_customer,
+            "parctipants_reviewable": participants_reviewable,
         })
 
 

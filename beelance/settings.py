@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '$n%^#g%qx#82w6t^dvjqwv)q*1cy+fwh1ohku7-rbjqcei2^jr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ADMINS = [('APU', 'tdt4242apu@gmail.com')]
 
@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_icons',
     'payment.apps.PaymentConfig',
-    'crispy_forms'
+    'crispy_forms',
+    'django_extensions',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
