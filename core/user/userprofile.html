@@ -5,7 +5,6 @@
 {% load home_extras %}
 
 {% block title %}{{ user_username }}{% endblock %}
-<
 {% block content %}
 
 <div class="row">
@@ -15,77 +14,80 @@
 </div>
 
 <div class="h-100">
-  <div class="row mt-1">
-    {% if display_full_name %}
-    <h5 class="ml-3 font-weight-bold">Full Name:</h5>
-    <h5 class="ml-2"> {{user_first_name}} {{user_last_name}}</h5>
+  <h5>Profile information</h5>
+  <table class="table">
+    {% if user_first_name or user_last_name and display_full_name  %}
+    <tr>
+      <th>Full Name:</th>
+      <td>{{user_first_name}} {{user_last_name}}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
     {% if display_email %}
-    <h5 class="ml-3 font-weight-bold">Email:</h5>
-    <h5 class="ml-2"> {{ user_email }}</h5>
+    <tr>
+      <th>Email:</th>
+      <td>{{ user_email }}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
-    {% if display_comapny %}
-    <h5 class="ml-3 font-weight-bold">Company:</h5>
-    <h5 class="ml-2"> {{ user_company }}</h5>
+    {% if display_comapny and user_company %}
+    <tr>
+      <th>Company:</th>
+      <td>{{ user_company }}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
-    {% if display_phone %}
-    <h5 class="ml-3 font-weight-bold">Phone:</h5>
-    <h5 class="ml-2"> {{ user_phone }}</h5>
+    {% if display_phone and user_phone %}
+    <tr>
+      <th>Phone:</th>
+      <td>{{ user_phone }}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
-    {% if display_street %}
-    <h5 class="ml-3 font-weight-bold">Address:</h5>
-    <h5 class="ml-2"> {{ user_address }}</h5>
+    {% if display_street and user_address %}
+    <tr>
+      <th>Address:</th>
+      <td>{{ user_address }}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
-    {% if display_city %}
-    <h5 class="ml-3 font-weight-bold">City:</h5>
-    <h5 class="ml-2"> {{ user_city }}</h5>
+    {% if display_city and user_city %}
+    <tr>
+      <th>City:</th>
+      <td>{{ user_city }}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
-    {% if display_state %}
-    <h5 class="ml-3 font-weight-bold">State:</h5>
-    <h5 class="ml-2"> {{ user_state }}</h5>
+    {% if display_state and user_state %}
+    <tr>
+      <th>State:</th>
+      <td>{{ user_state }}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
-    {% if display_postal %}
-    <h5 class="ml-3 font-weight-bold">Postal Code:</h5>
-    <h5 class="ml-2"> {{ user_postal_code }}</h5>
+    {% if display_postal and user_postal_code %}
+    <tr>
+      <th>Postal Code:</th>
+      <td>{{ user_postal_code }}</td>
+    </tr>
     {% endif %}
-  </div>
-  <div class="row mt-1">
-    {% if display_country %}
-    <h5 class="ml-3 font-weight-bold">Country:</h5>
-    <h5 class="ml-2"> {{ user_country }}</h5>
+    {% if display_country and user_country %}
+    <tr>
+      <th>Country:</th>
+      <td>{{ user_country }}</td>
+    </tr>
     {% endif %}
-  </div>
+  </table>
   <div class="row mt-1">
     <h5 class="ml-3 font-weight-bold">Reviews:</h5>
   </div>
   <div>
-      {% for review in reviews %}
-
-      <p>Project: {{ review.project }}</p>
-      <p>author:  <a href="{% url 'view_user_profile' review.author%}">{{review.author}}</a></p>
-      <h5>{{review.title}}</h5>
-      <p>{{ review.body }}</p>
-      <p>{{ review.date }}</p>
-
-      <br>
-      <br>
-      {% endfor %}
-
+    {% for review in reviews %}
+    
+    <p>Project: {{ review.project }}</p>
+    <p>author:  <a href="{% url 'view_user_profile' review.author%}">{{review.author}}</a></p>
+    <h5>{{review.title}}</h5>
+    <p>{{ review.body }}</p>
+    <p>{{ review.date }}</p>
+    
+    <br>
+    <br>
+    {% endfor %}
+    
   </div>
-
 </div>
+
 {% endblock %}

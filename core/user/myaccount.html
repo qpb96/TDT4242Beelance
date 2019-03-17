@@ -19,38 +19,45 @@
 
 <!-- Set a div box of height = 100% for the user profile-->
 <div class="h-100">
-  <div class="row mt-1">
-    <h5 class="ml-3 font-weight-bold">Username:</h5>
-    <h5 class="ml-2"> {{ user.username }} </h5>
-  </div>
-  <div class="row mt-1">
-    <h5 class="ml-3 font-weight-bold">Email:</h5>
-    <h5 class="ml-2"> {{ user.email }} </h5>
-  </div>
-  <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Company:</h5>
-    <h5 class="ml-2"> {{ user.profile.company }} </h5> 
-  </div>
-  <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Phone:</h5>
-    <h5 class="ml-2"> {{ user.profile.phone_number }} </h5> 
-  </div>
-  <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Address:</h5>
-    <h5 class="ml-2"> {{ user.profile.street_address }} </h5> 
-  </div>
-  <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">City:</h5>
-    <h5 class="ml-2"> {{ user.profile.city }} </h5> 
-  </div>
-  <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">State:</h5>
-    <h5 class="ml-2"> {{ user.profile.state }} </h5> 
-  </div>
-  <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Postal code:</h5>
-    <h5 class="ml-2"> {{ user.profile.postal_code }} </h5> 
-  </div>
+  <h5>Profile information</h5>
+  <table class="table">
+    <tr>
+      <th>Username:</th>
+      <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+      <th>Email:</th>
+      <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+      <th>Company:</th>
+      <td>{{ user.profile.company }}</td>
+    </tr>
+    <tr>
+      <th>Phone:</th>
+      <td>{{ user.profile.phone }}</td>
+    </tr>
+    <tr>
+      <th>Address:</th>
+      <td>{{ user.profile.street_address }}</td>
+    </tr>
+    <tr>
+      <th>City:</th>
+      <td>{{ user.profile.city }}</td>
+    </tr>
+    <tr>
+      <th>State:</th>
+      <td>{{ user.profile.state }}</td>
+    </tr>
+    <tr>
+      <th>Postal Code:</th>
+      <td>{{ user.profile.postal_code }}</td>
+    </tr>
+    <tr>
+      <th>Country:</th>
+      <td>{{ user.profile.country }}</td>
+    </tr>
+  </table>
 </div>
 
 <!-- Review box(es) goes under the user profile-->
