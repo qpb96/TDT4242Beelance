@@ -69,21 +69,27 @@
     <h5 class="ml-2"> {{ user_country }}</h5>
     {% endif %}
   </div>
-  <div class="row mt-1">
-    <h5 class="ml-3 font-weight-bold">Reviews:</h5>
-  </div>
   <section id="reviews" class="pb-3">
+    <div class="row mt-1">
+      <h5 class="ml-3 font-weight-bold">Reviews:</h5>
+    </div>
+    {% if reviews.count > 0 %}
     {% for review in reviews %}
-      <div class="card mt-1 mb-3">
-          <div class="card-body">
-            <h5 class="card-title">{{review.title}}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Project: {{ review.project }}</h6>
-            <h6 class="card-subtitle mb-2 text-muted">Author: <a href="{% url 'view_user_profile' review.author%}">{{review.author}}</a></h6>
-            <h6 class="card-subtitle mb-2 text-muted">Date: {{ review.date }}</h6>
-            <p class="card-text">{{ review.body }}</p>
-          </div>
-        </div>
+    <div class="card mt-1 mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{review.title}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Project: {{ review.project }}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Author: <a href="{% url 'view_user_profile' review.author%}">{{review.author}}</a></h6>
+        <h6 class="card-subtitle mb-2 text-muted">Date: {{ review.date }}</h6>
+        <p class="card-text">{{ review.body }}</p>
+      </div>
+    </div>
     {% endfor %}
+    {% else %}
+    <div>
+      <p>No reviews found.</p>
+    </div>
+    {% endif %}
   </section>
 
 </div>
