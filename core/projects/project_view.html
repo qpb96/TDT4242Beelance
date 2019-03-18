@@ -11,6 +11,22 @@
 {% block content %}
 
   <h3 class="my-3">{{ project.title }}</h3>
+  {% if user == project.user.user %}
+  <div class="promotion-container">
+    <h4>PROMOTION</h4>
+    {% if is_project_promoted %}
+    <p>Hurray! Your project is promoted until {{ promoted_project.end }}</p>
+    {% elif available_p_slots > 0 %}
+    <p>
+      There are available promotion slots.
+      Do you want to boost your project's visibility?
+    </p>
+    <p><b>Fee:</b> {{ promotion_settings.promotion_fee }}</p>
+    <p><b>Duration:</b> {{ promotion_settings.duration_in_days }} days</p>
+    <a class="btn btn-primary" role="button" href="{% url 'promotion_payment' project.id%}">Pay</a>
+    {% endif %}
+  </div>
+  {% endif %}
   <p>Posted by: <a href="{% url 'view_user_profile' project.user.user.username%}">{{project.user.user.username}}</a></p>
   <p>Project status: {{project.get_status_display}}</p>
 
