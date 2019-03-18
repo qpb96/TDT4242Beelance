@@ -14,7 +14,7 @@
 <form method="post">
     {% csrf_token %}
     <!-- User Form -->
-    <div class="row mt-3">
+    <div class="form-group mt-3">
       <h5 class="ml-3">First Name:</h5>
       <h5 style="margin-left:183px">Last Name:</h5>
     </div>
@@ -85,8 +85,8 @@
         <h5 class="ml-3">Postal Code:</h5>
       </div>
       <div class="row">
-        <h5 class="ml-3 input-xxlarge"> {{ profile_form.postal_code}} </h5> 
-        <h5 class="ml-2"> {{ profile_form.display_postal}} </h5> 
+        <label for="display-postal" class="ml-3 input-xxlarge"> {{ profile_form.postal_code}} </label> 
+        <input id="display-postal" class="ml-2 form-check"> {{ profile_form.display_postal}} </input> 
         <h5 class="ml-2">Display postal code</h5>
       </div>
 

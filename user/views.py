@@ -47,7 +47,7 @@ def view_user_profile(request, username):
     vieweduser = User.objects.get(username=username)
     reviews = Review.objects.all().filter(reviewed=vieweduser).order_by("-date")
     if user == username:
-        return render(request, 'user/myaccount.html')
+        return render(request, 'user/myaccount.html', {'reviews': reviews,})
     else:
         user = get_object_or_404(User, username=username)
 
@@ -111,10 +111,10 @@ def edit_user_profile(request, user_id):
 def write_review(request, username, project_id):
     profile = User.objects.get(username=username)
     form = PostReviewForm(request.POST)
+    project = Project.objects.get(id=project_id)
     if request.method == 'POST':
         form = PostReviewForm(request.POST)
         if form.is_valid():
-            project = Project.objects.get(id=project_id)
             instance = form.save(commit=False)
             instance.reviewed = profile
             instance.author = request.user.username
@@ -133,5 +133,9 @@ def write_review(request, username, project_id):
         else:
             form = PostReviewForm()
 
-    return render(request, 'user/write_review.html', {'form': form, })
+    return render(request, 'user/write_review.html', {
+        'form': form,
+        'review_of_user': username,
+        'project': project, 
+        })
 
