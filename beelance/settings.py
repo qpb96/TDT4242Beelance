@@ -47,8 +47,18 @@ INSTALLED_APPS = [
     'django_icons',
     'payment.apps.PaymentConfig',
     'crispy_forms',
+    'django_nose',
     'django_extensions',
 ]
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=projects',
+]
+
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
