@@ -106,7 +106,9 @@ def project_view(request, project_id):
                 for p in participants:
                     participants_reviewable.append(p)
         if request.method == 'POST' and 'offer_response' in request.POST:
+
             instance = get_object_or_404(TaskOffer, id=request.POST.get('taskofferid'))
+            print(request.POST)
             offer_response_form = TaskOfferResponseForm(request.POST, instance=instance)
             if offer_response_form.is_valid():
                 offer_response = offer_response_form.save(commit=False)
@@ -146,6 +148,7 @@ def project_view(request, project_id):
 
     else:
         if request.method == 'POST' and 'offer_submit' in request.POST:
+            print(request.POST )
             task_offer_form = TaskOfferForm(request.POST)
             if task_offer_form.is_valid():
                 task_offer = task_offer_form.save(commit=False)
