@@ -4,4 +4,7 @@ django-icons==0.1.0
 pytz==2018.4
 django-heroku
 django-crispy-forms==1.7.2
+coverage==4.5.3
+django-nose==1.4.6
 django-extensions==2.1.6
+

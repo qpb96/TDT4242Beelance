@@ -1,5 +1,5 @@
 # beelance
-
+![coverage](https://gitlab.com/gitlab-org/gitlab-ce/badges/master/coverage.svg?job=coverage)
 ## Code and structure
 
 .gitlab-ci.yml - gitlab ci
