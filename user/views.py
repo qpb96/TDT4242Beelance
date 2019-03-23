@@ -47,7 +47,15 @@ def view_user_profile(request, username):
     vieweduser = User.objects.get(username=username)
     reviews = Review.objects.all().filter(reviewed=vieweduser).order_by("-date")
     if user == username:
-        return render(request, 'user/myaccount.html', {'reviews': reviews,})
+        return render(request, 'user/myaccount.html', {'reviews': reviews,
+            "display_email": request.user.profile.display_email,
+            "display_phone": request.user.profile.display_phone,
+            "display_company": request.user.profile.display_company,
+            "display_city": request.user.profile.display_street,
+            "display_state": request.user.profile.display_state,
+            "display_postal": request.user.profile.display_postal,
+            "display_street": request.user.profile.display_street,
+            "display_country": request.user.profile.display_country,})
     else:
         user = get_object_or_404(User, username=username)
 
@@ -86,12 +94,13 @@ def edit_user_profile(request, user_id):
 
     if request.user == user:
         if request.method == 'POST':
+            print(request.POST)
             user_form = UserForm(request.POST, instance=user)
             profile_form = EditProfileForm(request.POST, instance=user.profile)
             if profile_form.is_valid() and user_form.is_valid():
-                user_form.save(commit=False)
-                profile_form.save(commit=False)
-                user.save()
+                user_form.save()
+                profile_form.save()
+
 
                 messages.success(request, ('Your profile was successfully updated!'))
                 return redirect('view_user_profile', username=user.username)
