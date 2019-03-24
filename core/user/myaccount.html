@@ -24,32 +24,46 @@
     <h5 class="ml-2"> {{ user.username }} </h5>
   </div>
   <div class="row mt-1">
-    <h5 class="ml-3 font-weight-bold">Email:</h5>
-    <h5 class="ml-2"> {{ user.email }} </h5>
+    {% if display_email %}
+      <h5 class="ml-3 font-weight-bold">Email:</h5>
+      <h5 class="ml-2"> {{ user.email }} </h5>
+    {% endif %}
   </div>
   <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Company:</h5>
-    <h5 class="ml-2"> {{ user.profile.company }} </h5> 
+    {% if display_company %}
+      <h5 class="font-weight-bold ml-3">Company:</h5>
+      <h5 class="ml-2"> {{ user.profile.company }} </h5>
+    {% endif %}
   </div>
   <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Phone:</h5>
-    <h5 class="ml-2"> {{ user.profile.phone_number }} </h5> 
+    {% if display_phone %}
+      <h5 class="font-weight-bold ml-3">Phone:</h5>
+      <h5 class="ml-2"> {{ user.profile.phone_number }} </h5>
+    {% endif %}
   </div>
   <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Address:</h5>
-    <h5 class="ml-2"> {{ user.profile.street_address }} </h5> 
+    {% if display_street %}
+      <h5 class="font-weight-bold ml-3">Address:</h5>
+      <h5 class="ml-2"> {{ user.profile.street_address }} </h5>
+    {% endif %}
   </div>
   <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">City:</h5>
-    <h5 class="ml-2"> {{ user.profile.city }} </h5> 
+    {% if display_city %}
+      <h5 class="font-weight-bold ml-3">City:</h5>
+      <h5 class="ml-2"> {{ user.profile.city }} </h5>
+    {% endif %}
   </div>
   <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">State:</h5>
-    <h5 class="ml-2"> {{ user.profile.state }} </h5> 
+    {% if display_state %}
+      <h5 class="font-weight-bold ml-3">State:</h5>
+      <h5 class="ml-2"> {{ user.profile.state }} </h5>
+    {% endif %}
   </div>
   <div class="row mt-1">
-    <h5 class="font-weight-bold ml-3">Postal code:</h5>
-    <h5 class="ml-2"> {{ user.profile.postal_code }} </h5> 
+    {% if display_postal %}
+      <h5 class="font-weight-bold ml-3">Postal code:</h5>
+      <h5 class="ml-2"> {{ user.profile.postal_code }} </h5>
+    {% endif %}
   </div>
   <section id="reviews" class="pb-3">
     <div class="row mt-1">
